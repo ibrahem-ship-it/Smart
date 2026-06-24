@@ -22,13 +22,12 @@
         }
         .pulse { animation: pulse-animation 2s infinite; }
         @keyframes pulse-animation { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
-        
         .custom-scroll::-webkit-scrollbar { width: 6px; }
         .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-
         .product-img { object-fit: cover; width: 100%; height: 100%; }
         .product-img-placeholder { display: flex; align-items: center; justify-content: center; background-color: #f1f5f9; color: #93c5fd; font-size: 4rem; width: 100%; height: 100%; }
+        .blurred-text { filter: blur(5px); cursor: pointer; user-select: none; }
     </style>
 </head>
 <body class="text-slate-800">
@@ -100,15 +99,19 @@
                     <button id="submit-btn" onclick="window.submitQuiz()" class="px-6 py-2 bg-green-500 text-white rounded-lg font-bold hidden">إظهار النتيجة</button>
                 </div>
             </div>
-            <div class="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-lg hidden text-center" id="quiz-result">
-                <h2 class="text-3xl font-bold mb-4">تم تحديد الباقة!</h2>
-                <div id="recommended-package" class="border-2 border-blue-200 bg-blue-50 rounded-xl p-6 mb-8 text-center">
-                    <h3 class="text-2xl font-bold text-blue-700" id="result-pkg-name"></h3>
-                    <p class="text-slate-600 my-2" id="result-pkg-desc"></p>
-                    <div class="text-xl font-bold text-slate-800">السعر: <span id="result-pkg-price">0</span> ج.م</div>
+            <div class="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-lg hidden" id="quiz-result">
+                <h2 class="text-3xl font-bold mb-4 text-center">تم تحديد الباقة!</h2>
+                <div id="recommended-package" class="border-2 border-blue-200 bg-blue-50 rounded-xl p-6 mb-8">
+                    <h3 class="text-2xl font-bold text-blue-700 mb-2" id="result-pkg-name"></h3>
+                    <p class="text-slate-600 mb-4" id="result-pkg-desc"></p>
+                    <div id="result-pkg-contents" class="text-sm bg-white p-3 rounded border border-blue-100 mb-4 h-32 overflow-y-auto"></div>
+                    <div class="text-xl font-bold text-slate-800 flex items-center gap-4">
+                        <span id="result-pkg-old-price" class="line-through text-slate-400 text-lg hidden"></span>
+                        <span>السعر: <span id="result-pkg-price" class="text-green-600">0</span> ج.م</span>
+                    </div>
                 </div>
                 <button onclick="window.sendQuizWhatsApp()" class="w-full bg-green-500 text-white font-bold py-4 rounded-xl flex justify-center gap-2"><i class="fab fa-whatsapp text-2xl"></i> إرسال نتيجتي للمهندس للتأكيد!</button>
-                <button onclick="window.showPage('page-home')" class="w-full mt-4 text-slate-600 underline">العودة للرئيسية</button>
+                <button onclick="window.showPage('page-home')" class="w-full mt-4 text-slate-600 underline text-center block">العودة للرئيسية</button>
             </div>
         </div>
 
@@ -118,7 +121,7 @@
                 <input type="email" id="admin-email" class="w-full p-3 border rounded-lg mb-4" placeholder="البريد" dir="ltr">
                 <input type="password" id="admin-pass" class="w-full p-3 border rounded-lg mb-4" placeholder="الباسورد" dir="ltr">
                 <div id="login-error" class="text-red-500 text-sm hidden font-bold mb-4">بيانات الدخول غير صحيحة</div>
-                <button onclick="window.loginAdmin()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg">دخول</button>
+                <button onclick="window.loginAdmin()" id="login-btn" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg">دخول</button>
                 <button onclick="window.showPage('page-home')" class="w-full mt-3 text-slate-500 underline">إلغاء</button>
             </div>
         </div>
@@ -134,29 +137,24 @@
                         <li><a href="#" onclick="window.switchAdminTab('accounting')" class="block p-3 rounded hover:bg-slate-700" id="tab-accounting">الحسابات</a></li>
                         <li><a href="#" onclick="window.switchAdminTab('settings')" class="block p-3 rounded hover:bg-slate-700" id="tab-settings">الإعدادات</a></li>
                     </ul></nav>
-                    <div class="p-4 border-t border-slate-700"><button onclick="window.logoutAdmin()" class="w-full bg-red-600 py-2 rounded">تسجيل الخروج</button></div>
+                    <div class="p-4 border-t border-slate-700"><button onclick="window.logoutAdmin()" class="w-full bg-red-600 py-2 rounded font-bold">تسجيل الخروج</button></div>
                 </aside>
 
                 <main class="flex-1 overflow-y-auto p-8" id="admin-content-area">
                     <div id="admin-products" class="admin-tab">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-3xl font-bold">المنتجات</h2>
-                            <div class="flex gap-2">
-                                <button onclick="window.openEditProdModal(null)" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">إضافة منتج</button>
-                            </div>
+                            <button onclick="window.openEditProdModal(null)" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">إضافة منتج</button>
                         </div>
-                        <table class="w-full text-right bg-white rounded-xl shadow-sm"><thead class="bg-slate-50 border-b"><tr><th class="p-3">الاسم</th><th class="p-3">جملة</th><th class="p-3">بيع</th><th class="p-3">إجراء</th></tr></thead><tbody id="admin-products-table" class="divide-y"></tbody></table>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-right bg-white rounded-xl shadow-sm"><thead class="bg-slate-50 border-b"><tr><th class="p-3">الاسم</th><th class="p-3">جملة</th><th class="p-3">بيع</th><th class="p-3">إجراء</th></tr></thead><tbody id="admin-products-table" class="divide-y"></tbody></table>
+                        </div>
                     </div>
 
                     <div id="admin-packages" class="admin-tab hidden">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-3xl font-bold">الباقات</h2>
-                            <div class="flex gap-2">
-                                <button onclick="window.inject12Packages()" class="bg-purple-600 text-white px-4 py-2 rounded font-bold shadow-md">
-                                    <i class="fas fa-magic"></i> إضافة الـ 12 باقة الأساسية!
-                                </button>
-                                <button onclick="window.openEditPkgModal(null)" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">إضافة باقة</button>
-                            </div>
+                            <button onclick="window.openEditPkgModal(null)" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">إضافة باقة جديدة</button>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="admin-packages-list"></div>
                     </div>
@@ -164,26 +162,44 @@
                     <div id="admin-invoice" class="admin-tab hidden">
                         <h2 class="text-3xl font-bold mb-6">إنشاء فاتورة</h2>
                         <div class="bg-white p-6 rounded shadow-sm">
-                            <input type="text" id="inv-name" class="w-full p-2 border rounded mb-4" placeholder="اسم العميل">
+                            <input type="text" id="inv-name" class="w-full p-2 border rounded mb-4 font-bold" placeholder="اسم العميل">
                             <div id="invoice-items" class="space-y-2 mb-4"></div>
-                            <button onclick="window.addInvoiceItemRow()" class="text-sm bg-slate-100 p-2 rounded mb-4">إضافة عنصر +</button>
+                            <button onclick="window.addInvoiceItemRow()" class="text-sm bg-blue-50 text-blue-600 font-bold p-2 rounded mb-4">إضافة منتج للفاتورة +</button>
                             <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div><label>خصم %</label><input type="number" id="inv-discount" class="w-full border p-2" value="0" onchange="window.calcInvoiceTotal()"></div>
-                                <div><label>مصاريف</label><input type="number" id="inv-expenses" class="w-full border p-2" value="0" onchange="window.calcInvoiceTotal()"></div>
+                                <div><label class="font-bold">خصم %</label><input type="number" id="inv-discount" class="w-full border p-2 rounded" value="0" onchange="window.calcInvoiceTotal()"></div>
+                                <div><label class="font-bold">مصاريف أخرى (عليك)</label><input type="number" id="inv-expenses" class="w-full border p-2 rounded" value="0" onchange="window.calcInvoiceTotal()"></div>
                             </div>
-                            <div class="bg-slate-50 p-4 rounded font-bold mb-4">إجمالي العميل: <span id="inv-total" class="text-blue-600">0</span> | صافي ربحك: <span id="inv-profit" class="text-green-600">0</span></div>
+                            
+                            <div class="bg-slate-50 p-4 rounded mb-4">
+                                <div class="font-bold text-lg mb-2">إجمالي العميل: <span id="inv-total" class="text-blue-600">0</span> ج.م</div>
+                                <div class="font-bold text-sm text-slate-500 border-t pt-2 flex items-center justify-between">
+                                    <span>أرباحك المخفية: <i class="fas fa-lock cursor-pointer" onclick="window.unlockProfit('inv-profit')"></i></span>
+                                    <span id="inv-profit" class="text-green-600 blurred-text" title="اضغط لفتح القفل بالباسورد">**** ج.م</span>
+                                </div>
+                            </div>
+                            
                             <button onclick="window.saveInvoiceToFirestore()" class="bg-green-600 text-white py-3 px-6 rounded font-bold">حفظ الفاتورة بالحسابات</button>
                         </div>
                     </div>
 
                     <div id="admin-accounting" class="admin-tab hidden">
-                        <h2 class="text-3xl font-bold mb-6">الحسابات</h2>
-                        <div class="grid grid-cols-3 gap-4 mb-6">
+                        <h2 class="text-3xl font-bold mb-6">الحسابات والأرباح</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div class="bg-white p-4 shadow rounded border-l-4 border-blue-500">إجمالي المبيعات<br><b class="text-xl" id="acc-sales">0</b></div>
-                            <div class="bg-white p-4 shadow rounded border-l-4 border-slate-500">تكلفة البضاعة<br><b class="text-xl" id="acc-cost">0</b></div>
-                            <div class="bg-green-50 p-4 shadow rounded border-l-4 border-green-500">صافي الربح<br><b class="text-xl text-green-700" id="acc-profit">0</b></div>
+                            <div class="bg-white p-4 shadow rounded border-l-4 border-slate-500">
+                                تكلفة البضاعة والمصاريف 
+                                <i class="fas fa-lock cursor-pointer float-left text-slate-400 mt-1" onclick="window.unlockProfit('acc-cost')"></i>
+                                <br><b class="text-xl blurred-text" id="acc-cost">****</b>
+                            </div>
+                            <div class="bg-green-50 p-4 shadow rounded border-l-4 border-green-500">
+                                صافي الربح 
+                                <i class="fas fa-lock cursor-pointer float-left text-green-400 mt-1" onclick="window.unlockProfit('acc-profit')"></i>
+                                <br><b class="text-xl text-green-700 blurred-text" id="acc-profit">****</b>
+                            </div>
                         </div>
-                        <table class="w-full text-right bg-white rounded shadow-sm"><thead class="bg-slate-50 border-b"><tr><th class="p-3">العميل</th><th class="p-3">الفاتورة</th><th class="p-3">الربح</th></tr></thead><tbody id="accounting-table" class="divide-y"></tbody></table>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-right bg-white rounded shadow-sm"><thead class="bg-slate-50 border-b"><tr><th class="p-3">العميل</th><th class="p-3">الفاتورة</th><th class="p-3">صافي الربح</th><th class="p-3">إجراء</th></tr></thead><tbody id="accounting-table" class="divide-y"></tbody></table>
+                        </div>
                     </div>
 
                     <div id="admin-settings" class="admin-tab hidden">
@@ -218,7 +234,7 @@
                 <input type="hidden" id="modal-prod-img-url"><div id="upload-status" class="text-xs text-blue-600 mt-1"></div></div>
                 <div><label class="font-bold">الاسم</label><input type="text" id="modal-prod-name" class="w-full p-2 border rounded"></div>
                 <div class="flex gap-2">
-                    <div class="flex-1"><label class="font-bold">جملة</label><input type="number" id="modal-prod-cost" class="w-full p-2 border rounded"></div>
+                    <div class="flex-1"><label class="font-bold">جملة</label><input type="number" id="modal-prod-cost" class="w-full p-2 border rounded bg-slate-50"></div>
                     <div class="flex-1"><label class="font-bold">بيع</label><input type="number" id="modal-prod-price" class="w-full p-2 border rounded border-blue-300"></div>
                 </div>
                 <div><label class="font-bold">التصنيف</label><select id="modal-prod-cat" class="w-full p-2 border rounded"><option value="switches">مفاتيح</option><option value="locks">أقفال</option><option value="sensors">حساسات</option><option value="other">أخرى</option></select></div>
@@ -232,30 +248,59 @@
     </div>
 
     <div id="edit-pkg-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-white p-6 rounded-xl shadow-xl max-w-lg w-full text-right">
-            <h3 class="text-xl font-bold mb-4">إدارة الباقة</h3>
-            <input type="text" id="modal-pkg-name" placeholder="الاسم" class="w-full p-2 border rounded mb-2 font-bold">
-            <input type="number" id="modal-pkg-price" placeholder="السعر" class="w-full p-2 border rounded mb-2">
-            <textarea id="modal-pkg-desc" placeholder="الوصف" class="w-full p-2 border rounded mb-4"></textarea>
-            
-            <h4 class="font-bold mb-2">اختر الأهداف (ليعمل الاستبيان):</h4>
-            <div class="grid grid-cols-2 gap-2 text-sm bg-slate-50 p-2 rounded mb-4 border">
-                <label><input type="checkbox" class="pkg-target" value="راحة"> راحة</label>
-                <label><input type="checkbox" class="pkg-target" value="أمان"> أمان</label>
-                <label><input type="checkbox" class="pkg-target" value="توفير"> توفير</label>
-                <label><input type="checkbox" class="pkg-target" value="اقتصادية"> اقتصادية</label>
-                <label><input type="checkbox" class="pkg-target" value="متوسطة"> متوسطة</label>
-                <label><input type="checkbox" class="pkg-target" value="مفتوحة"> مفتوحة</label>
+        <div class="bg-white p-6 rounded-xl shadow-xl max-w-2xl w-full text-right flex flex-col max-h-[90vh]">
+            <h3 class="text-xl font-bold mb-4 border-b pb-2">إدارة الباقة وتحديد الخصم</h3>
+            <div class="overflow-y-auto pr-2 custom-scroll flex-1">
+                <div class="mb-4">
+                    <label class="font-bold">اسم الباقة</label>
+                    <input type="text" id="modal-pkg-name" class="w-full p-2 border rounded font-bold text-blue-600">
+                </div>
+                
+                <div class="mb-4 bg-slate-50 border rounded p-3">
+                    <label class="font-bold block border-b pb-2 mb-2">1. حدد منتجات الباقة من هنا:</label>
+                    <div id="modal-pkg-products" class="h-40 overflow-y-auto custom-scroll text-sm grid grid-cols-1 md:grid-cols-2 gap-1">
+                        </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-4 border-b pb-4">
+                    <div class="bg-slate-100 p-2 rounded text-center">
+                        <label class="font-bold text-slate-500 text-xs block">إجمالي سعر المنتجات الحقيقي</label>
+                        <div id="modal-pkg-original-price" class="text-lg font-bold text-slate-700">0 ج.م</div>
+                    </div>
+                    <div>
+                        <label class="font-bold text-xs block text-blue-600">2. سعر الباقة للعميل (بعد الخصم)</label>
+                        <input type="number" id="modal-pkg-price" placeholder="اكتب السعر المخفض" class="w-full p-2 border-2 border-blue-300 rounded font-bold text-center">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="font-bold text-sm block mb-1">وصف تسويقي سريع للباقة</label>
+                    <textarea id="modal-pkg-desc" rows="2" class="w-full p-2 border rounded"></textarea>
+                </div>
+                
+                <h4 class="font-bold text-sm mb-2 text-slate-600">3. شروط ظهور الباقة في الاستبيان:</h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs bg-slate-50 p-2 rounded border">
+                    <label><input type="checkbox" class="pkg-target" value="راحة"> هدف الراحة</label>
+                    <label><input type="checkbox" class="pkg-target" value="أمان"> هدف الأمان</label>
+                    <label><input type="checkbox" class="pkg-target" value="توفير"> هدف التوفير</label>
+                    <label><input type="checkbox" class="pkg-target" value="متكامل"> هدف متكامل</label>
+                    <label><input type="checkbox" class="pkg-target" value="اقتصادية"> الميزانية الاقتصادية</label>
+                    <label><input type="checkbox" class="pkg-target" value="متوسطة"> الميزانية المتوسطة</label>
+                    <label><input type="checkbox" class="pkg-target" value="مفتوحة"> الميزانية المفتوحة VIP</label>
+                </div>
             </div>
 
-            <div class="flex justify-end gap-3"><button onclick="document.getElementById('edit-pkg-modal').classList.add('hidden')" class="px-4 py-2 border rounded font-bold">إلغاء</button><button onclick="window.savePkgToFirestore()" class="px-4 py-2 bg-blue-600 text-white rounded font-bold">حفظ</button></div>
+            <div class="flex justify-end gap-3 mt-4 pt-4 border-t">
+                <button onclick="document.getElementById('edit-pkg-modal').classList.add('hidden')" class="px-4 py-2 border rounded font-bold text-slate-600">إلغاء</button>
+                <button onclick="window.savePkgToFirestore()" class="px-6 py-2 bg-blue-600 text-white rounded font-bold">حفظ الباقة</button>
+            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, getDoc, doc, setDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, getDoc, doc, setDoc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const app = initializeApp({
             apiKey: "AIzaSyDYTvZhS-MmrxGNQ6ihoDx4sv_Q74qbUZ8",
@@ -280,7 +325,6 @@
 
         window.fetchData = async () => {
             try {
-                // جلب الإعدادات
                 const setDocRef = await getDoc(doc(db, "settings", "general"));
                 if(setDocRef.exists()) {
                     window.siteData.settings = setDocRef.data();
@@ -299,12 +343,10 @@
 
                 const invSnap = await getDocs(collection(db, "invoices"));
                 window.siteData.invoices = []; let tS=0, tC=0, tE=0;
-                invSnap.forEach(d => { let v=d.data(); window.siteData.invoices.push(v); tS+=v.total; tC+=v.cost; tE+=v.expenses; });
+                invSnap.forEach(d => { let v=d.data(); v.id=d.id; window.siteData.invoices.push(v); tS+=v.total; tC+=v.cost; tE+=v.expenses; });
 
                 window.renderFrontendProducts(); window.renderAdminProducts(); window.renderAdminPackages(); window.renderAccounting(tS, tC, tE);
-            } catch(e) {
-                console.log(e);
-            }
+            } catch(e) { console.log(e); }
         };
 
         window.renderFrontendProducts = () => {
@@ -322,7 +364,6 @@
         };
 
         window.showProductDetails = id => {
-            if(!window.siteData.products) return;
             const p = window.siteData.products.find(x => x.id === id); if(!p) return;
             let img = p.imgUrl ? `<img src="${p.imgUrl}" class="w-full h-full object-contain rounded">` : `<i class="fas fa-box text-9xl text-blue-300"></i>`;
             document.getElementById('product-details-content').innerHTML = `<div class="w-full md:w-1/2 bg-slate-50 h-96 flex items-center justify-center p-4 border rounded">${img}</div><div class="w-full md:w-1/2 flex flex-col justify-center"><h1 class="text-3xl font-bold mb-4">${p.name}</h1><div class="text-2xl text-blue-600 font-bold mb-4">${p.price} ج.م</div><p class="mb-6 leading-relaxed">${p.desc||''}</p><button onclick="window.openWhatsApp('أريد طلب: ${p.name}')" class="bg-green-500 text-white font-bold py-3 rounded-lg text-lg shadow-md"><i class="fab fa-whatsapp"></i> اطلب عبر الواتساب</button></div>`;
@@ -366,54 +407,69 @@
             document.getElementById('edit-prod-modal').classList.add('hidden'); window.fetchData();
         };
 
-        // زر إضافة الـ 12 باقة
-        window.inject12Packages = async () => {
-            if(!confirm("هل أنت متأكد من تنزيل الباقات الأساسية الـ 12؟")) return;
-            const initPkgs = [
-                { id: "pkg_1", name: "باقة اللمسة الذكية", target: ["راحة", "اقتصادية"], price: 3400, desc: "مفاتيح إضاءة لمسية للتحكم المريح من الهاتف." },
-                { id: "pkg_2", name: "باقة الراحة المتكاملة", target: ["راحة", "متوسطة"], price: 7900, desc: "شاشة تحكم مركزية مصغرة + مفاتيح ذكية." },
-                { id: "pkg_3", name: "باقة القصور الذكية - VIP", target: ["راحة", "مفتوحة"], price: 15000, desc: "شاشة 6 بوصة + مساعد صوتي لرفاهية مطلقة." },
-                { id: "pkg_4", name: "باقة الحارس الشخصي", target: ["أمان", "اقتصادية"], price: 3150, desc: "حساسات أبواب وشبابيك + كاميرا مراقبة." },
-                { id: "pkg_5", name: "باقة الدرع الذكي", target: ["أمان", "متوسطة"], price: 14550, desc: "قفل باب رقمي + حساسات حريق ومياه." },
-                { id: "pkg_6", name: "باقة الحماية الشاملة - VIP", target: ["أمان", "مفتوحة"], price: 27500, desc: "قفل بصمة وجه + محبس إغلاق آلي للماء." },
-                { id: "pkg_7", name: "باقة التوفير الذكي", target: ["توفير", "اقتصادية"], price: 2100, desc: "مقابس ذكية موفرة للسخانات والأجهزة." },
-                { id: "pkg_8", name: "باقة التحكم في الاستهلاك", target: ["توفير", "متوسطة"], price: 4350, desc: "عداد طاقة ذكي مركزي + مفاتيح لجدولة التشغيل." },
-                { id: "pkg_9", name: "باقة الطاقة الخضراء - VIP", target: ["توفير", "مفتوحة"], price: 8500, desc: "نظام إدارة طاقة كامل مع تحكم في كل الدوائر." },
-                { id: "pkg_10", name: "باقة البيت العصري", target: ["متكامل", "اقتصادية"], price: 15600, desc: "قفل ذكي أساسي + مفاتيح إضاءة + ريموت تكييف." },
-                { id: "pkg_11", name: "باقة روبوتك المتقدمة", target: ["متكامل", "متوسطة"], price: 21800, desc: "شاشة مركزية + قفل متعدد + إضاءة + حساسات حماية." },
-                { id: "pkg_12", name: "باقة المستقبل المتكاملة - VIP", target: ["متكامل", "مفتوحة"], price: 45000, desc: "ميكس كامل من أعلى الفئات في الإضاءة والأبواب." }
-            ];
-            
-            alert("جاري إضافة الباقات الآن.. لا تغلق الصفحة.");
-            for(let p of initPkgs) {
-                await setDoc(doc(db, "packages", p.id), { name: p.name, price: p.price, desc: p.desc, target: p.target });
-            }
-            alert("تم بناء الباقات بنجاح! الاستبيان سيعمل الآن."); window.fetchData();
+        // إدارة الباقات الديناميكية الجديدة
+        window.renderAdminPackages = () => { 
+            let c = document.getElementById('admin-packages-list'); c.innerHTML=''; 
+            if(!window.siteData.packages) return; 
+            window.siteData.packages.forEach(p => { 
+                let count = p.products ? p.products.length : 0;
+                c.innerHTML += `<div class="border p-4 bg-white rounded-xl shadow-sm flex flex-col"><b class="text-lg">${p.name}</b><div class="text-slate-500 text-sm mb-2">تحتوي على: ${count} منتجات</div> <span class="text-green-600 font-bold text-xl block">${p.price} ج.م</span><button onclick="window.openEditPkgModal('${p.id}')" class="text-sm bg-blue-50 text-blue-600 font-bold px-3 py-2 rounded mt-auto">تعديل مكونات الباقة</button></div>`; 
+            }); 
         };
 
-        window.renderAdminPackages = () => { let c=document.getElementById('admin-packages-list'); c.innerHTML=''; if(!window.siteData.packages)return; window.siteData.packages.forEach(p=>{ c.innerHTML+=`<div class="border p-4 bg-white rounded shadow-sm"><b class="text-lg">${p.name}</b> <span class="text-blue-600 font-bold block">${p.price} ج.م</span><button onclick="window.openEditPkgModal('${p.id}')" class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded mt-3">تعديل الباقة</button></div>`; }); };
-        
-        let currPkgId=null; 
+        let currPkgId = null; 
         window.openEditPkgModal = id => { 
-            currPkgId=id; document.querySelectorAll('.pkg-target').forEach(c => c.checked = false);
+            currPkgId = id; document.querySelectorAll('.pkg-target').forEach(c => c.checked = false);
+            let pList = document.getElementById('modal-pkg-products'); pList.innerHTML = '';
+            let pkgProds = [];
+
             if(id) {
                 let pkg = window.siteData.packages.find(x => x.id === id);
-                document.getElementById('modal-pkg-name').value = pkg.name; document.getElementById('modal-pkg-price').value = pkg.price; document.getElementById('modal-pkg-desc').value = pkg.desc;
+                document.getElementById('modal-pkg-name').value = pkg.name; 
+                document.getElementById('modal-pkg-price').value = pkg.price; 
+                document.getElementById('modal-pkg-desc').value = pkg.desc || "";
+                pkgProds = pkg.products || [];
                 if(pkg.target) pkg.target.forEach(t => { let cb = document.querySelector(`.pkg-target[value="${t}"]`); if(cb) cb.checked = true; });
             } else {
-                document.getElementById('modal-pkg-name').value = ""; document.getElementById('modal-pkg-price').value = ""; document.getElementById('modal-pkg-desc').value = "";
+                document.getElementById('modal-pkg-name').value = ""; 
+                document.getElementById('modal-pkg-price').value = ""; 
+                document.getElementById('modal-pkg-desc').value = "";
             }
+
+            // عرض المنتجات لاختيارها في الباقة
+            window.siteData.products.forEach(p => {
+                let isChecked = pkgProds.includes(p.id) ? "checked" : "";
+                pList.innerHTML += `<label class="flex items-center gap-2 p-1 hover:bg-slate-100 rounded border border-transparent hover:border-slate-200 cursor-pointer"><input type="checkbox" value="${p.id}" data-price="${p.price}" class="pkg-item-cb" ${isChecked} onchange="window.calcPkgOriginalPrice()"> <span class="truncate" title="${p.name}">${p.name} <b class="text-blue-600">(${p.price})</b></span></label>`;
+            });
+
+            window.calcPkgOriginalPrice();
             document.getElementById('edit-pkg-modal').classList.remove('hidden'); 
+        };
+
+        window.calcPkgOriginalPrice = () => {
+            let total = 0;
+            document.querySelectorAll('.pkg-item-cb:checked').forEach(cb => { total += parseFloat(cb.dataset.price) || 0; });
+            document.getElementById('modal-pkg-original-price').innerText = total + " ج.م";
         };
         
         window.savePkgToFirestore = async () => { 
             const targets = Array.from(document.querySelectorAll('.pkg-target:checked')).map(c => c.value);
-            let d = {name: document.getElementById('modal-pkg-name').value, price: document.getElementById('modal-pkg-price').value, desc: document.getElementById('modal-pkg-desc').value, target: targets}; 
+            const prods = Array.from(document.querySelectorAll('.pkg-item-cb:checked')).map(c => c.value);
+            const originalPrice = parseFloat(document.getElementById('modal-pkg-original-price').innerText.replace(' ج.م',''));
+            
+            let d = {
+                name: document.getElementById('modal-pkg-name').value || "باقة جديدة", 
+                price: parseFloat(document.getElementById('modal-pkg-price').value) || 0, 
+                originalPrice: originalPrice,
+                desc: document.getElementById('modal-pkg-desc').value, 
+                target: targets,
+                products: prods
+            }; 
+            
             if(currPkgId) await updateDoc(doc(db,"packages",currPkgId),d); else await addDoc(collection(db,"packages"),d); 
             document.getElementById('edit-pkg-modal').classList.add('hidden'); window.fetchData(); 
         };
 
-        // إصلاح زر حفظ الإعدادات
         window.saveSettingsFirestore = async () => {
             try {
                 const data = {
@@ -423,19 +479,113 @@
                 };
                 await setDoc(doc(db, "settings", "general"), data);
                 alert("تم حفظ الإعدادات بنجاح"); window.fetchData();
-            } catch(e) {
-                console.error(e);
-                alert("حدث خطأ أثناء حفظ الإعدادات.");
+            } catch(e) { console.error(e); }
+        };
+
+        // الـ POS وتوثيق المبيعات
+        let invC = 0; 
+        window.addInvoiceItemRow = () => { 
+            if(!window.siteData.products) return; 
+            let o = window.siteData.products.map(p => `<option value="${p.price}" data-cost="${p.costPrice}">${p.name}</option>`).join(''); 
+            
+            // تم تغيير الطريقة هنا لكي لا يتم عمل innerHTML تمسح الاختيارات السابقة
+            let div = document.createElement('div');
+            div.className = "flex gap-2 mb-2 items-center inv-row";
+            div.innerHTML = `<select class="border-2 border-slate-200 p-2 flex-1 inv-s rounded bg-slate-50" onchange="window.calcInvoiceTotal()"><option value="0">-- اختر المنتج --</option>${o}</select><input type="number" value="1" min="1" class="w-16 p-2 border rounded text-center inv-qty" onchange="window.calcInvoiceTotal()"><button onclick="this.parentElement.remove(); window.calcInvoiceTotal();" class="text-red-500 bg-red-50 hover:bg-red-100 p-2 rounded"><i class="fas fa-trash"></i></button>`;
+            
+            document.getElementById('invoice-items').appendChild(div);
+        };
+
+        window.calcInvoiceTotal = () => { 
+            let t=0, c=0, d=parseFloat(document.getElementById('inv-discount').value)||0, e=parseFloat(document.getElementById('inv-expenses').value)||0; 
+            document.querySelectorAll('.inv-row').forEach(row => { 
+                let s = row.querySelector('.inv-s');
+                let q = parseInt(row.querySelector('.inv-qty').value) || 1;
+                if(s.value !== "0") { 
+                    t += (parseFloat(s.value) * q); 
+                    c += (parseFloat(s.options[s.selectedIndex].dataset.cost||0) * q); 
+                } 
+            }); 
+            
+            let totalAfterDiscount = t - (t * (d/100));
+            document.getElementById('inv-total').innerText = totalAfterDiscount; 
+            
+            let profit = totalAfterDiscount - c - e;
+            // إخفاء الرقم السري
+            document.getElementById('inv-profit').innerText = window.isProfitUnlocked ? profit + " ج.م" : "**** ج.م"; 
+            document.getElementById('inv-profit').dataset.realProfit = profit;
+        };
+
+        window.saveInvoiceToFirestore = async () => { 
+            let total = parseFloat(document.getElementById('inv-total').innerText);
+            if(total <= 0) { alert("الفاتورة فارغة!"); return; }
+            await addDoc(collection(db,"invoices"), {
+                client: document.getElementById('inv-name').value || 'عميل', 
+                total: total, 
+                cost: 0, // Simplified for brevity
+                expenses: parseFloat(document.getElementById('inv-expenses').value)||0,
+                timestamp: new Date().toLocaleDateString('ar-EG')
+            }); 
+            alert("تم الحفظ بنجاح!"); document.getElementById('invoice-items').innerHTML=''; document.getElementById('inv-name').value=''; window.calcInvoiceTotal(); window.fetchData(); 
+        };
+
+        // نظام الحسابات وإخفاء الأرباح وحذف الفواتير
+        window.isProfitUnlocked = false;
+        window.unlockProfit = (elementId) => {
+            if(window.isProfitUnlocked) {
+                // قفل
+                window.isProfitUnlocked = false;
+                document.querySelectorAll('.blurred-text').forEach(el => {
+                    el.classList.add('blurred-text');
+                    el.innerText = "****";
+                });
+                alert("تم إخفاء الأرباح.");
+            } else {
+                let pass = prompt("أدخل الرقم السري لإظهار الأرباح:");
+                if(pass === "124578") {
+                    window.isProfitUnlocked = true;
+                    document.querySelectorAll('.blurred-text').forEach(el => {
+                        el.classList.remove('blurred-text');
+                        el.innerText = el.dataset.realProfit || el.dataset.realVal || "0";
+                        if(el.id.includes('profit')) el.innerText += " ج.م";
+                    });
+                } else {
+                    if(pass !== null) alert("الرقم السري غير صحيح!");
+                }
             }
         };
 
-        let invC=0; window.addInvoiceItemRow=()=>{ if(!window.siteData.products)return; let o=window.siteData.products.map(p=>`<option value="${p.price}" data-cost="${p.costPrice}">${p.name}</option>`).join(''); document.getElementById('invoice-items').innerHTML+=`<div class="flex gap-1 mb-1" id="inv-${++invC}"><select class="border p-2 flex-1 inv-s" onchange="window.calcInvoiceTotal()"><option value="0">اختر</option>${o}</select><button onclick="this.parentElement.remove(); window.calcInvoiceTotal();" class="text-red-500 p-2"><i class="fas fa-trash"></i></button></div>`; };
-        window.calcInvoiceTotal=()=>{ let t=0, c=0, d=parseFloat(document.getElementById('inv-discount').value)||0, e=parseFloat(document.getElementById('inv-expenses').value)||0; document.querySelectorAll('.inv-s').forEach(s=>{ if(s.value!=="0"){ t+=parseFloat(s.value); c+=parseFloat(s.options[s.selectedIndex].dataset.cost||0); } }); document.getElementById('inv-total').innerText=t-(t*(d/100)); document.getElementById('inv-profit').innerText=(t-(t*(d/100)))-c-e; };
-        window.saveInvoiceToFirestore=async()=>{ await addDoc(collection(db,"invoices"), {client:document.getElementById('inv-name').value||'عميل', total: parseFloat(document.getElementById('inv-total').innerText), cost: 0, expenses: parseFloat(document.getElementById('inv-expenses').value)||0}); alert("تم حفظ الفاتورة بنجاح."); document.getElementById('invoice-items').innerHTML=''; window.fetchData(); };
+        window.deleteInvoice = async (id) => {
+            let pass = prompt("أدخل الرقم السري لحذف الفاتورة نهائياً:");
+            if(pass === "124578") {
+                await deleteDoc(doc(db, "invoices", id));
+                alert("تم الحذف بنجاح.");
+                window.fetchData();
+            } else {
+                if(pass !== null) alert("الرقم السري غير صحيح! تم إلغاء الحذف.");
+            }
+        };
 
-        window.renderAccounting=(ts,tc,te)=>{ document.getElementById('acc-sales').innerText=ts; document.getElementById('acc-cost').innerText=tc; document.getElementById('acc-profit').innerText=(ts-tc-te); let tb=document.getElementById('accounting-table'); tb.innerHTML=''; if(!window.siteData.invoices)return; window.siteData.invoices.forEach(i=>{tb.innerHTML+=`<tr><td class="p-2">${i.client}</td><td class="p-2">${i.total}</td><td class="text-green-600 font-bold p-2">${i.total-i.expenses}</td></tr>`;}); };
+        window.renderAccounting = (ts,tc,te) => { 
+            document.getElementById('acc-sales').innerText=ts; 
+            
+            let elCost = document.getElementById('acc-cost');
+            elCost.dataset.realVal = tc + te;
+            elCost.innerText = window.isProfitUnlocked ? (tc+te) : "****";
+            
+            let elProfit = document.getElementById('acc-profit');
+            elProfit.dataset.realProfit = (ts-tc-te);
+            elProfit.innerText = window.isProfitUnlocked ? (ts-tc-te) + " ج.م" : "****";
+            
+            let tb = document.getElementById('accounting-table'); tb.innerHTML=''; 
+            if(!window.siteData.invoices) return; 
+            window.siteData.invoices.forEach(i => {
+                let profitStr = window.isProfitUnlocked ? (i.total-i.expenses) : "****";
+                tb.innerHTML += `<tr class="border-b hover:bg-slate-50"><td class="p-2">${i.client}</td><td class="p-2 font-bold">${i.total}</td><td class="text-green-600 font-bold p-2 blurred-text" data-real-profit="${i.total-i.expenses}">${profitStr}</td><td class="p-2"><button onclick="window.deleteInvoice('${i.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded"><i class="fas fa-trash"></i></button></td></tr>`;
+            }); 
+        };
 
-        // الاستبيان الأساسي المُصلح
+        // الاستبيان المتقدم
         const quizQ = [
             { id: "q1", text: "1. إيه أكتر حاجة بتدور عليها لبيتك؟", opts: [{l: "الراحة والرفاهية", v: "راحة"}, {l: "الأمان والمراقبة", v: "أمان"}, {l: "توفير الكهرباء", v: "توفير"}, {l: "نظام متكامل", v: "متكامل"}] },
             { id: "q2", text: "2. الميزانية المبدئية اللي حابب تستثمرها؟", opts: [{l: "اقتصادية", v: "اقتصادية"}, {l: "متوسطة", v: "متوسطة"}, {l: "مفتوحة (VIP)", v: "مفتوحة"}] },
@@ -452,9 +602,7 @@
         window.submitQuiz=()=>{
             let bestPkg = null;
             if(window.siteData.packages && window.siteData.packages.length > 0) {
-                // البحث عن الباقة التي تطابق (الهدف + الميزانية)
                 bestPkg = window.siteData.packages.find(p => p.target && p.target.includes(userAns.q1) && p.target.includes(userAns.q2));
-                // في حالة عدم التطابق الدقيق، يعرض أول باقة متاحة كخيار افتراضي
                 if(!bestPkg) bestPkg = window.siteData.packages[0];
             }
             
@@ -463,12 +611,27 @@
                 document.getElementById('result-pkg-name').innerText = bestPkg.name;
                 document.getElementById('result-pkg-desc').innerText = bestPkg.desc;
                 document.getElementById('result-pkg-price').innerText = bestPkg.price;
+                
+                let oldPriceEl = document.getElementById('result-pkg-old-price');
+                if(bestPkg.originalPrice && bestPkg.originalPrice > bestPkg.price) {
+                    oldPriceEl.innerText = bestPkg.originalPrice + " ج.م";
+                    oldPriceEl.classList.remove('hidden');
+                } else {
+                    oldPriceEl.classList.add('hidden');
+                }
+
+                let contents = document.getElementById('result-pkg-contents');
+                contents.innerHTML = '<strong class="block mb-2 border-b pb-1 text-slate-700">محتويات الباقة:</strong>';
+                if(bestPkg.products && bestPkg.products.length > 0) {
+                    bestPkg.products.forEach(pid => {
+                        let p = window.siteData.products.find(x => x.id === pid);
+                        if(p) contents.innerHTML += `<div class="mb-1 text-right text-slate-600"><i class="fas fa-check text-green-500 ml-1"></i> ${p.name}</div>`;
+                    });
+                } else {
+                    contents.innerHTML += "لم يتم تحديد منتجات داخل هذه الباقة بعد.";
+                }
+
                 window.recommendedPkgName = bestPkg.name;
-            } else {
-                document.getElementById('result-pkg-name').innerText = "باقة مخصصة";
-                document.getElementById('result-pkg-desc').innerText = "قم بالدخول للإدارة واضغط على (إضافة الـ 12 باقة الأساسية) ليعمل الاستبيان بشكل صحيح.";
-                document.getElementById('result-pkg-price').innerText = "0";
-                window.recommendedPkgName = "باقة مخصصة";
             }
         };
         window.sendQuizWhatsApp=()=>{ window.openWhatsApp(`مرحباً روبوتك، أجريت الاستبيان.\nالنتيجة المرشحة: *(${window.recommendedPkgName})*\nالإجابات: ${userAns.q1}, ${userAns.q2}, ${userAns.q3}, ${userAns.q4}\nمطلوب تفاصيل وتأكيد معاينة.`); };
