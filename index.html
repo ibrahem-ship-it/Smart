@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboTech - روبوتك | حلول المنزل الذكي</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; }
+        .hero-bg { background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover; }
+        .hidden { display: none !important; }
+        .whatsapp-float {
+            position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px;
+            background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 30px;
+            box-shadow: 2px 2px 3px #999; z-index: 100; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; transition: transform 0.3s;
+        }
+        .pulse { animation: pulse-animation 2s infinite; }
+        @keyframes pulse-animation { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div class="bg-amber-500 text-white text-center py-2 text-sm font-semibold flex justify-center items-center gap-2 px-4" id="warranty-banner">
+        <i class="fas fa-shield-alt"></i>
+        <span>خايف من التكنولوجيا؟ مع ضمان 'روبوتك' الذهبي، نضمن لك استبدال القطع وصيانتها ضد عيوب الصناعة. دعم فني متوفر دائماً.</span>
+    </div>
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-blue-600 flex items-center gap-2 cursor-pointer" onclick="window.showPage('home')">
+                <i class="fas fa-home"></i> RoboTech <span class="text-slate-700 text-lg">روبوتك</span>
+            </div>
+            <nav class="hidden md:flex gap-6 font-semibold text-slate-600 items-center">
+                <a href="#" onclick="window.showPage('home')" class="hover:text-blue-600 transition">الرئيسية</a>
+                <a href="#products-section" onclick="window.showPage('home')" class="hover:text-blue-600 transition">المنتجات</a>
+                <a href="#" onclick="window.startQuiz()" class="hover:text-blue-600 transition">الاستبيان الذكي</a>
+            </nav>
+            <div class="flex gap-4 items-center">
+                <button onclick="window.showAdminLogin()" class="text-slate-400 hover:text-slate-600 flex items-center gap-1">
+                    <i class="fas fa-cog"></i> <span class="hidden md:inline">الإدارة</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <div id="page-home">
+            <section class="hero-bg text-white py-32 text-center px-4 relative">
+                <div class="max-w-3xl mx-auto relative z-10">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">حوّل بيتك لبيت ذكي مع RoboTech بكل سهولة</h1>
+                    <p class="text-xl mb-8 text-slate-200">اختار أجهزتك، التوصيل علينا، و<span class="text-amber-400 font-bold ml-1">التركيب مجاني لفترة محدودة</span>.</p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <button onclick="window.startQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition">رشحلي الباقة المناسبة</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="products-section" class="py-16 bg-slate-50 border-t">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-10">جميع المنتجات</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="products-container">
+                        <p class="text-center w-full text-slate-500"><i class="fas fa-spinner fa-spin"></i> جاري تحميل المنتجات...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="page-quiz" class="hidden py-16 bg-slate-50 min-h-screen text-center">
+            <h2 class="text-3xl font-bold text-blue-600 mb-4">استبيان روبوتك الذكي</h2>
+            <p class="text-slate-600">سيتم برمجة منطق الاستبيان في الخطوة القادمة بعد إعداد قاعدة البيانات.</p>
+            <button onclick="window.showPage('home')" class="mt-8 text-blue-600 underline">العودة للرئيسية</button>
+        </div>
+
+        <div id="page-admin-login" class="hidden min-h-screen bg-slate-800 flex items-center justify-center p-4">
+            <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md text-center">
+                <div class="text-4xl text-blue-600 mb-4"><i class="fas fa-lock"></i></div>
+                <h2 class="text-2xl font-bold mb-6 text-slate-800">تسجيل دخول الإدارة</h2>
+                <div class="space-y-4 mb-6 text-right">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-600 mb-1">البريد الإلكتروني</label>
+                        <input type="email" id="admin-email" class="w-full p-3 border rounded-lg" placeholder="admin@robotech.com" dir="ltr">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-600 mb-1">كلمة المرور</label>
+                        <input type="password" id="admin-pass" class="w-full p-3 border rounded-lg" placeholder="******" dir="ltr">
+                    </div>
+                    <div id="login-error" class="text-red-500 text-sm hidden font-semibold text-center"></div>
+                </div>
+                <button onclick="window.loginAdmin()" id="login-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">دخول <i class="fas fa-sign-in-alt"></i></button>
+                <button onclick="window.showPage('home')" class="w-full mt-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-lg transition">إلغاء</button>
+            </div>
+        </div>
+
+        <div id="page-admin" class="hidden min-h-screen bg-slate-100 p-8">
+            <div class="flex justify-between items-center mb-8 bg-white p-4 rounded-lg shadow-sm border border-slate-200">
+                <h2 class="text-2xl font-bold text-slate-800"><i class="fas fa-shield-alt text-blue-600"></i> لوحة تحكم RoboTech</h2>
+                <button onclick="window.logoutAdmin()" class="bg-red-600 text-white px-4 py-2 rounded font-bold hover:bg-red-700">تسجيل خروج</button>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+                <i class="fas fa-database text-6xl text-green-500 mb-4"></i>
+                <h3 class="text-2xl font-bold text-slate-700 mb-2">أهلاً بك يا هندسة!</h3>
+                <p class="text-slate-500">تم تسجيل الدخول بنجاح وتوثيقك من خلال Firebase Auth.</p>
+                <p class="text-slate-500 mt-2">سنقوم ببرمجة جداول الحسابات وإدارة المنتجات هنا في الخطوة التالية.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center" id="main-footer">
+        <div class="container mx-auto px-4"><p>&copy; 2026 روبوتك. جميع الحقوق محفوظة.</p></div>
+    </footer>
+
+    <script type="module">
+        // 1. استيراد دوال الفايربيس (Firebase SDK v10/v11)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // 2. إعدادات مشروعك الحقيقية التي أرسلتها
+        const firebaseConfig = {
+            apiKey: "AIzaSyDYTvZhS-MmrxGNQ6ihoDx4sv_Q74qbUZ8",
+            authDomain: "smart-bb35a.firebaseapp.com",
+            projectId: "smart-bb35a",
+            storageBucket: "smart-bb35a.firebasestorage.app",
+            messagingSenderId: "648921056832",
+            appId: "1:648921056832:web:53b6a14f5bcbe087dc41a5",
+            measurementId: "G-3E92XMY1S2"
+        };
+
+        // 3. تهيئة الفايربيس
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // 4. جعل الدوال متاحة للـ HTML (لأننا داخل module)
+        window.showPage = function(pageId) {
+            document.querySelectorAll('main > div').forEach(d => d.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+            
+            // إخفاء الفوتر في شاشات الإدارة
+            if(pageId === 'page-admin-login' || pageId === 'page-admin') {
+                document.getElementById('main-footer').classList.add('hidden');
+                document.getElementById('warranty-banner').classList.add('hidden');
+            } else {
+                document.getElementById('main-footer').classList.remove('hidden');
+                document.getElementById('warranty-banner').classList.remove('hidden');
+            }
+            window.scrollTo(0,0);
+        };
+
+        window.startQuiz = function() { window.showPage('page-quiz'); };
+        window.showAdminLogin = function() { window.showPage('page-admin-login'); };
+
+        // 5. برمجة تسجيل الدخول (Firebase Auth)
+        window.loginAdmin = function() {
+            const email = document.getElementById('admin-email').value;
+            const pass = document.getElementById('admin-pass').value;
+            const errorDiv = document.getElementById('login-error');
+            const btn = document.getElementById('login-btn');
+
+            if(!email || !pass) {
+                errorDiv.innerText = "يرجى إدخال البريد وكلمة المرور!";
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            btn.innerText = "جاري الدخول...";
+            
+            signInWithEmailAndPassword(auth, email, pass)
+                .then((userCredential) => {
+                    // تم تسجيل الدخول بنجاح!
+                    btn.innerHTML = 'دخول <i class="fas fa-sign-in-alt"></i>';
+                    errorDiv.classList.add('hidden');
+                    window.showPage('page-admin');
+                })
+                .catch((error) => {
+                    btn.innerHTML = 'دخول <i class="fas fa-sign-in-alt"></i>';
+                    errorDiv.innerText = "بيانات الدخول غير صحيحة، يرجى التأكد والمحاولة.";
+                    errorDiv.classList.remove('hidden');
+                    console.error(error.message);
+                });
+        };
+
+        window.logoutAdmin = function() {
+            signOut(auth).then(() => {
+                window.showPage('home');
+            });
+        };
+
+        // 6. مراقبة حالة المستخدم (إذا كان مسجلاً مسبقاً لا تطلب منه الباسورد مجدداً)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // المستخدم مسجل دخول بالفعل
+                console.log("مدير النظام متواجد:", user.email);
+                // لو ضغط على زر الإدارة وهو مسجل، يفتح لوحة التحكم فوراً
+                window.showAdminLogin = function() { window.showPage('page-admin'); };
+            } else {
+                // لا يوجد مستخدم
+                window.showAdminLogin = function() { window.showPage('page-admin-login'); };
+            }
+        });
+
+        // بيانات وهمية مؤقتة للمنتجات حتى نربطها بـ Firestore في الخطوة القادمة
+        const tempProducts = [
+            { name: "مفتاح الإضاءة اللمسي (1 خط)", price: 800, desc: "تحكم ذكي في إضاءتك من الهاتف بلمسة أنيقة." },
+            { name: "قفل الأمان الرقمي المتعدد", price: 12000, desc: "افتح باب شقتك بالبصمة، الكارت، أو الرقم السري." },
+            { name: "الشاشة المركزية المصغرة", price: 4200, desc: "شاشة لمس أنيقة تجمع لك التحكم في كل إضاءة غرفتك." }
+        ];
+
+        window.onload = () => {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+            tempProducts.forEach(p => {
+                container.innerHTML += `
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col border border-slate-100">
+                        <div class="h-40 bg-slate-50 flex items-center justify-center text-blue-300 text-6xl border-b"><i class="fas fa-box"></i></div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-slate-800 mb-2">${p.name}</h3>
+                            <p class="text-xs text-slate-500 mb-4 flex-1">${p.desc}</p>
+                            <div class="text-xl font-bold text-blue-600 border-t pt-4">${p.price} ج.م</div>
+                        </div>
+                    </div>
+                `;
+            });
+        };
+    </script>
+</body>
+</html>
