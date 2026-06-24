@@ -11,7 +11,7 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
-        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; }
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; margin: 0; padding: 0; }
         .hero-bg { background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover; }
         .hidden { display: none !important; }
         .whatsapp-float {
@@ -20,8 +20,15 @@
             box-shadow: 2px 2px 3px #999; z-index: 100; display: flex; align-items: center; justify-content: center;
             text-decoration: none; transition: transform 0.3s;
         }
+        html[dir="ltr"] .whatsapp-float { right: 40px; left: auto; }
+        html[dir="rtl"] .whatsapp-float { right: 40px; left: auto; }
+        .whatsapp-float:hover { transform: scale(1.1); }
         .pulse { animation: pulse-animation 2s infinite; }
         @keyframes pulse-animation { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
+        
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body class="text-slate-800">
@@ -33,13 +40,14 @@
 
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-600 flex items-center gap-2 cursor-pointer" onclick="window.showPage('home')">
+            <div class="text-2xl font-bold text-blue-600 flex items-center gap-2 cursor-pointer" onclick="window.showPage('page-home')">
                 <i class="fas fa-home"></i> RoboTech <span class="text-slate-700 text-lg">روبوتك</span>
             </div>
             <nav class="hidden md:flex gap-6 font-semibold text-slate-600 items-center">
-                <a href="#" onclick="window.showPage('home')" class="hover:text-blue-600 transition">الرئيسية</a>
-                <a href="#products-section" onclick="window.showPage('home')" class="hover:text-blue-600 transition">المنتجات</a>
+                <a href="#" onclick="window.showPage('page-home')" class="hover:text-blue-600 transition">الرئيسية</a>
+                <a href="#" onclick="window.showPage('page-home'); setTimeout(()=> document.getElementById('products-section').scrollIntoView({behavior:'smooth'}), 100);" class="hover:text-blue-600 transition">المنتجات</a>
                 <a href="#" onclick="window.startQuiz()" class="hover:text-blue-600 transition">الاستبيان الذكي</a>
+                <a href="#" onclick="window.openWhatsApp('أهلاً روبوتك، محتاج أطلب خدمة المعاينة المجانية لشقتي لتحديد الأجهزة المناسبة.')" class="text-amber-500 hover:text-amber-600 transition flex items-center gap-1"><i class="fas fa-tools"></i> <span>معاينة مجانية</span></a>
             </nav>
             <div class="flex gap-4 items-center">
                 <button onclick="window.showAdminLogin()" class="text-slate-400 hover:text-slate-600 flex items-center gap-1">
@@ -50,34 +58,97 @@
     </header>
 
     <main id="main-content">
-        <div id="page-home">
+        
+        <div id="page-home" class="page-section">
             <section class="hero-bg text-white py-32 text-center px-4 relative">
                 <div class="max-w-3xl mx-auto relative z-10">
                     <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">حوّل بيتك لبيت ذكي مع RoboTech بكل سهولة</h1>
-                    <p class="text-xl mb-8 text-slate-200">اختار أجهزتك، التوصيل علينا، و<span class="text-amber-400 font-bold ml-1">التركيب مجاني لفترة محدودة</span>.</p>
+                    <p class="text-xl mb-8 text-slate-200">اختار أجهزتك، التوصيل علينا، و<span id="hero-installation-text" class="text-amber-400 font-bold ml-1">التركيب مجاني لفترة محدودة</span>.</p>
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <button onclick="window.startQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition">رشحلي الباقة المناسبة</button>
+                        <button onclick="document.getElementById('products-section').scrollIntoView({behavior: 'smooth'})" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1">تصفح المنتجات</button>
+                        <button onclick="window.startQuiz()" class="bg-white text-blue-600 hover:bg-slate-100 font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1">رشحلي الباقة المناسبة</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-16 bg-blue-50">
+                <div class="container mx-auto px-4 text-center">
+                    <h2 class="text-3xl font-bold mb-6 text-slate-800">روبوتك بتوفرلك فلوسك!</h2>
+                    <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-md border border-blue-100">
+                        <div class="text-5xl text-blue-500 mb-4"><i class="fas fa-piggy-bank"></i></div>
+                        <p class="text-lg text-slate-600 leading-relaxed">
+                            أنظمتنا الذكية بتوفرلك لحد <span class="font-bold text-green-500 text-2xl">30%</span> من فاتورة الكهرباء شهرياً بفضل ميزة الفصل الآلي للأجهزة المنسية والتحكم في استهلاك كل فيشة.
+                        </p>
                     </div>
                 </div>
             </section>
 
             <section id="products-section" class="py-16 bg-slate-50 border-t">
                 <div class="container mx-auto px-4">
-                    <h2 class="text-3xl font-bold text-slate-800 mb-10">جميع المنتجات</h2>
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+                        <h2 class="text-3xl font-bold text-slate-800">جميع المنتجات</h2>
+                        <div class="relative w-full md:w-auto">
+                            <input type="text" id="product-search" placeholder="ابحث عن منتج..." class="w-full md:w-80 pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm" onkeyup="window.filterProducts()">
+                            <i class="fas fa-search absolute left-4 top-4 text-slate-400"></i>
+                        </div>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="products-container">
-                        <p class="text-center w-full text-slate-500"><i class="fas fa-spinner fa-spin"></i> جاري تحميل المنتجات...</p>
+                        <div class="text-center w-full col-span-full py-10 text-slate-500"><i class="fas fa-spinner fa-spin text-3xl mb-3"></i><br>جاري تحميل المنتجات...</div>
                     </div>
                 </div>
             </section>
         </div>
 
-        <div id="page-quiz" class="hidden py-16 bg-slate-50 min-h-screen text-center">
-            <h2 class="text-3xl font-bold text-blue-600 mb-4">استبيان روبوتك الذكي</h2>
-            <p class="text-slate-600">سيتم برمجة منطق الاستبيان في الخطوة القادمة بعد إعداد قاعدة البيانات.</p>
-            <button onclick="window.showPage('home')" class="mt-8 text-blue-600 underline">العودة للرئيسية</button>
+        <div id="page-product-details" class="hidden page-section py-16 bg-white min-h-screen">
+             <div class="container mx-auto px-4">
+                <button onclick="window.showPage('page-home'); setTimeout(()=> document.getElementById('products-section').scrollIntoView(), 100);" class="mb-8 text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-2">
+                    <i class="fas fa-arrow-right"></i> العودة للمنتجات
+                </button>
+                <div class="flex flex-col md:flex-row gap-10" id="product-details-content">
+                    </div>
+             </div>
         </div>
 
-        <div id="page-admin-login" class="hidden min-h-screen bg-slate-800 flex items-center justify-center p-4">
+        <div id="page-quiz" class="hidden page-section py-16 bg-slate-50 min-h-screen">
+            <div class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg" id="quiz-container">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-blue-600 mb-2">استبيان روبوتك الذكي</h2>
+                    <p class="text-slate-500">جاوب على 5 أسئلة وهنرشحلك الباقة الأنسب لبيتك.</p>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2.5 mb-8">
+                    <div id="quiz-progress" class="bg-blue-600 h-2.5 rounded-full" style="width: 20%"></div>
+                </div>
+                <div id="question-area">
+                    <h3 id="question-text" class="text-2xl font-semibold mb-6 text-slate-800"></h3>
+                    <div id="options-area" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+                <div class="flex justify-between mt-8" id="quiz-nav">
+                    <button onclick="window.prevQuestion()" class="px-6 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-600 font-semibold transition">السابق</button>
+                    <span id="quiz-counter" class="text-slate-500 font-semibold self-center">1 / 5</span>
+                    <button id="next-btn" onclick="window.nextQuestion()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold transition hidden">التالي</button>
+                    <button id="submit-btn" onclick="window.submitQuiz()" class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-semibold transition hidden">إظهار النتيجة</button>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-lg hidden" id="quiz-result">
+                <div class="text-center mb-8">
+                    <div class="inline-block bg-green-100 text-green-600 p-4 rounded-full mb-4"><i class="fas fa-check-circle text-4xl"></i></div>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2">تم تحديد الباقة المناسبة!</h2>
+                    <p class="text-slate-600">بناءً على إجاباتك، نرشح لك الباقة التالية:</p>
+                </div>
+                <div id="recommended-package" class="border-2 border-blue-200 bg-blue-50 rounded-xl p-6 mb-8 text-center">
+                    <h3 class="text-2xl font-bold text-blue-700 mb-2" id="result-pkg-name">اسم الباقة</h3>
+                    <p class="text-slate-600 mb-4 text-sm" id="result-pkg-desc">وصف الباقة</p>
+                    <div class="text-xl font-bold text-slate-800 mb-4">السعر التقريبي: <span id="result-pkg-price">0</span> ج.م</div>
+                </div>
+                <button onclick="window.sendQuizWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition flex justify-center items-center gap-2 text-lg">
+                    <i class="fab fa-whatsapp text-2xl"></i> إرسال نتيجتي لمهندس روبوتك لتأكيد التركيب!
+                </button>
+                <button onclick="window.showPage('page-home')" class="w-full mt-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 px-8 rounded-xl transition">العودة للرئيسية</button>
+            </div>
+        </div>
+
+        <div id="page-admin-login" class="hidden page-section min-h-screen bg-slate-800 flex items-center justify-center p-4">
             <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md text-center">
                 <div class="text-4xl text-blue-600 mb-4"><i class="fas fa-lock"></i></div>
                 <h2 class="text-2xl font-bold mb-6 text-slate-800">تسجيل دخول الإدارة</h2>
@@ -93,143 +164,646 @@
                     <div id="login-error" class="text-red-500 text-sm hidden font-semibold text-center"></div>
                 </div>
                 <button onclick="window.loginAdmin()" id="login-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">دخول <i class="fas fa-sign-in-alt"></i></button>
-                <button onclick="window.showPage('home')" class="w-full mt-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-lg transition">إلغاء</button>
+                <button onclick="window.showPage('page-home')" class="w-full mt-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-lg transition">إلغاء</button>
             </div>
         </div>
 
-        <div id="page-admin" class="hidden min-h-screen bg-slate-100 p-8">
-            <div class="flex justify-between items-center mb-8 bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-                <h2 class="text-2xl font-bold text-slate-800"><i class="fas fa-shield-alt text-blue-600"></i> لوحة تحكم RoboTech</h2>
-                <button onclick="window.logoutAdmin()" class="bg-red-600 text-white px-4 py-2 rounded font-bold hover:bg-red-700">تسجيل خروج</button>
-            </div>
-            <div class="bg-white p-8 rounded-xl shadow-sm text-center">
-                <i class="fas fa-database text-6xl text-green-500 mb-4"></i>
-                <h3 class="text-2xl font-bold text-slate-700 mb-2">أهلاً بك يا هندسة!</h3>
-                <p class="text-slate-500">تم تسجيل الدخول بنجاح وتوثيقك من خلال Firebase Auth.</p>
-                <p class="text-slate-500 mt-2">سنقوم ببرمجة جداول الحسابات وإدارة المنتجات هنا في الخطوة التالية.</p>
+        <div id="page-admin" class="hidden page-section bg-slate-100 min-h-screen">
+            <div class="flex h-screen overflow-hidden">
+                <aside class="w-64 bg-slate-800 text-white flex flex-col">
+                    <div class="p-6 text-2xl font-bold border-b border-slate-700">RoboTech Admin</div>
+                    <nav class="flex-1 p-4 overflow-y-auto">
+                        <ul class="space-y-2">
+                            <li><a href="#" onclick="window.switchAdminTab('dashboard')" class="block p-3 rounded bg-slate-700 hover:bg-slate-700 transition" id="tab-dashboard"><i class="fas fa-chart-line w-6"></i> لوحة القيادة</a></li>
+                            <li><a href="#" onclick="window.switchAdminTab('products')" class="block p-3 rounded hover:bg-slate-700 transition" id="tab-products"><i class="fas fa-box w-6"></i> إدارة المنتجات</a></li>
+                            <li><a href="#" onclick="window.switchAdminTab('packages')" class="block p-3 rounded hover:bg-slate-700 transition" id="tab-packages"><i class="fas fa-layer-group w-6"></i> إدارة الباقات</a></li>
+                            <li><a href="#" onclick="window.switchAdminTab('invoice')" class="block p-3 rounded hover:bg-slate-700 transition" id="tab-invoice"><i class="fas fa-file-invoice-dollar w-6"></i> إنشاء فاتورة (POS)</a></li>
+                            <li><a href="#" onclick="window.switchAdminTab('accounting')" class="block p-3 rounded hover:bg-slate-700 transition text-green-400" id="tab-accounting"><i class="fas fa-calculator w-6"></i> الحسابات والأرباح</a></li>
+                            <li><a href="#" onclick="window.switchAdminTab('settings')" class="block p-3 rounded hover:bg-slate-700 transition" id="tab-settings"><i class="fas fa-cogs w-6"></i> إعدادات الموقع</a></li>
+                        </ul>
+                    </nav>
+                    <div class="p-4 border-t border-slate-700">
+                        <button onclick="window.logoutAdmin()" class="w-full bg-red-600 hover:bg-red-700 py-2 rounded transition font-semibold"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+                    </div>
+                </aside>
+
+                <main class="flex-1 overflow-y-auto p-8" id="admin-content-area">
+                    
+                    <div id="admin-dashboard" class="admin-tab">
+                        <h2 class="text-3xl font-bold mb-6 text-slate-800">لوحة القيادة</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                <div class="text-slate-500 mb-1">إجمالي المنتجات</div>
+                                <div class="text-3xl font-bold text-slate-800" id="stat-products-count">0</div>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                <div class="text-slate-500 mb-1">إجمالي المبيعات (نظام الـ POS)</div>
+                                <div class="text-3xl font-bold text-blue-600" id="stat-sales-total">0 ج.م</div>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                <div class="text-slate-500 mb-1">حالة التركيب للعملاء</div>
+                                <div class="text-xl font-bold text-green-500" id="stat-install-status">مجاني</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="admin-products" class="admin-tab hidden">
+                        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                            <h2 class="text-3xl font-bold text-slate-800">إدارة المنتجات</h2>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="window.openEditProdModal(null)" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm flex items-center gap-2"><i class="fas fa-plus"></i> إضافة منتج جديد</button>
+                                <button onclick="window.downloadExcelTemplate()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm flex items-center gap-2"><i class="fas fa-file-excel"></i> تحميل الإكسيل</button>
+                                <label class="bg-slate-600 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition cursor-pointer text-sm flex items-center gap-2">
+                                    <i class="fas fa-upload"></i> رفع الإكسيل
+                                    <input type="file" class="hidden" accept=".xlsx, .xls" onchange="window.handleExcelUpload(event)">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-right" dir="rtl">
+                                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-600">
+                                        <tr>
+                                            <th class="p-4 font-semibold">م</th>
+                                            <th class="p-4 font-semibold">الاسم الوصفي للمنتج</th>
+                                            <th class="p-4 font-semibold">سعر الجملة (التكلفة)</th>
+                                            <th class="p-4 font-semibold">سعر البيع للعميل</th>
+                                            <th class="p-4 font-semibold text-center">إجراء</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-products-table" class="divide-y divide-slate-100">
+                                        <tr><td colspan="5" class="p-4 text-center text-slate-500">جاري التحميل من Firestore...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="admin-packages" class="admin-tab hidden">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-3xl font-bold text-slate-800">إدارة باقات الاستبيان</h2>
+                            <button onclick="window.openEditPkgModal(null)" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm flex items-center gap-2"><i class="fas fa-plus"></i> إضافة باقة جديدة</button>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="admin-packages-list">
+                            <div class="col-span-2 text-center py-10 text-slate-500">جاري التحميل من Firestore...</div>
+                        </div>
+                    </div>
+
+                    <div id="admin-invoice" class="admin-tab hidden">
+                        <h2 class="text-3xl font-bold mb-6 text-slate-800">إنشاء فاتورة (POS) وتوثيق المبيعات</h2>
+                        <div class="flex flex-col xl:flex-row gap-6">
+                            <div class="flex-1 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                <h3 class="text-xl font-bold mb-4 border-b pb-2">بيانات العميل</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div><label class="block text-sm font-medium text-slate-700 mb-1">اسم العميل</label><input type="text" id="inv-name" class="w-full p-2 border rounded focus:ring-blue-500"></div>
+                                    <div><label class="block text-sm font-medium text-slate-700 mb-1">رقم الهاتف</label><input type="text" id="inv-phone" class="w-full p-2 border rounded focus:ring-blue-500"></div>
+                                </div>
+                                <h3 class="text-xl font-bold mb-4 border-b pb-2 flex justify-between items-center">
+                                    المنتجات المباعة
+                                    <button onclick="window.addInvoiceItemRow()" class="text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1 rounded"><i class="fas fa-plus"></i> إضافة عنصر</button>
+                                </h3>
+                                <div id="invoice-items" class="space-y-3 mb-6"></div>
+                                
+                                <h3 class="text-xl font-bold mb-4 border-b pb-2 text-amber-600">المصاريف والخصومات</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 bg-slate-50 p-4 rounded-lg border">
+                                    <div><label class="block text-sm font-bold text-slate-700 mb-1">خصم للعميل (%)</label><input type="number" id="inv-discount" value="0" min="0" max="100" class="w-full p-2 border rounded focus:ring-blue-500" onchange="window.calcInvoiceTotal()"></div>
+                                    <div><label class="block text-sm font-bold text-slate-700 mb-1">مصاريف إضافية (مواصلات/فني)</label><input type="number" id="inv-expenses" value="0" min="0" class="w-full p-2 border rounded focus:ring-blue-500" onchange="window.calcInvoiceTotal()"></div>
+                                </div>
+
+                                <div class="bg-slate-100 p-4 rounded-lg space-y-2">
+                                    <div class="flex justify-between items-center text-sm text-slate-600"><span>الإجمالي قبل الخصم:</span><span id="inv-subtotal">0 ج.م</span></div>
+                                    <div class="flex justify-between items-center font-bold text-lg border-t pt-2 mt-2"><span>إجمالي فاتورة العميل:</span><span class="text-blue-600" id="inv-total">0 ج.م</span></div>
+                                    <div class="flex justify-between items-center font-bold text-green-600 border-t pt-2 mt-2"><span>صافي ربحك المتوقع:</span><span id="inv-profit">0 ج.م</span></div>
+                                </div>
+                                
+                                <div class="flex gap-4 mt-6">
+                                    <button onclick="window.generateInvoice()" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-lg transition"><i class="fas fa-eye"></i> معاينة فاتورة العميل</button>
+                                    <button onclick="window.saveInvoiceToFirestore()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition"><i class="fas fa-save"></i> حفظ الفاتورة (للحسابات)</button>
+                                </div>
+                            </div>
+                            
+                            <div class="w-full xl:w-1/3 bg-slate-50 p-6 rounded-xl border border-slate-200" id="invoice-preview" style="display:none;">
+                                <div class="bg-white p-6 shadow-sm mb-4" id="print-area">
+                                    <div class="text-center mb-6 border-b pb-4">
+                                        <h2 class="text-2xl font-bold text-blue-600">RoboTech</h2>
+                                        <p class="text-sm text-slate-500">حلول المنزل الذكي</p>
+                                    </div>
+                                    <div class="mb-4 text-sm text-right">
+                                        <p><strong>العميل:</strong> <span id="prev-name"></span></p>
+                                        <p><strong>التاريخ:</strong> <span id="prev-date"></span></p>
+                                    </div>
+                                    <table class="w-full text-sm mb-4 text-right">
+                                        <thead class="border-b"><tr><th>المنتج</th><th>الكمية</th><th>السعر</th></tr></thead>
+                                        <tbody id="prev-items" class="divide-y"></tbody>
+                                    </table>
+                                    <div class="text-right text-sm text-slate-500 mt-2" id="prev-discount-row" style="display:none;">الخصم: <span id="prev-discount-val"></span>%</div>
+                                    <div class="text-right font-bold text-lg mt-2 border-t pt-2">الإجمالي النهائي: <span id="prev-total"></span> ج.م</div>
+                                    <div class="mt-8 text-xs text-center text-slate-500 border-t pt-4">الضمان: استبدال القطع وصيانتها ضد عيوب الصناعة.</div>
+                                </div>
+                                <button onclick="window.sendInvoiceWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg transition flex justify-center items-center gap-2 font-bold"><i class="fab fa-whatsapp text-xl"></i> إرسال للعميل عبر الواتساب</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="admin-accounting" class="admin-tab hidden">
+                        <h2 class="text-3xl font-bold mb-6 text-slate-800">الحسابات والأرباح</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                            <div class="bg-white p-5 rounded-xl border-l-4 border-blue-500 shadow-sm">
+                                <div class="text-slate-500 text-sm mb-1">إجمالي المبيعات (Revenue)</div>
+                                <div class="text-2xl font-bold text-slate-800" id="acc-sales">0 ج.م</div>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border-l-4 border-slate-500 shadow-sm">
+                                <div class="text-slate-500 text-sm mb-1">التكلفة الإجمالية (البضاعة)</div>
+                                <div class="text-2xl font-bold text-slate-800" id="acc-cost">0 ج.م</div>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border-l-4 border-red-500 shadow-sm">
+                                <div class="text-slate-500 text-sm mb-1">مصاريف التشغيل المتغيرة</div>
+                                <div class="text-2xl font-bold text-red-600" id="acc-expenses">0 ج.م</div>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border-l-4 border-green-500 shadow-sm bg-green-50">
+                                <div class="text-green-700 text-sm mb-1 font-bold">صافي الربح الفعلي</div>
+                                <div class="text-3xl font-bold text-green-600" id="acc-profit">0 ج.م</div>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4 text-slate-800">سجل الفواتير</h3>
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                            <table class="w-full text-right text-sm" dir="rtl">
+                                <thead class="bg-slate-50 border-b border-slate-200 text-slate-600">
+                                    <tr>
+                                        <th class="p-3">التاريخ</th>
+                                        <th class="p-3">العميل</th>
+                                        <th class="p-3">قيمة الفاتورة</th>
+                                        <th class="p-3">تكلفة البضاعة</th>
+                                        <th class="p-3">المصاريف</th>
+                                        <th class="p-3 font-bold text-green-600">صافي الربح</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="accounting-table" class="divide-y divide-slate-100">
+                                    <tr><td colspan="6" class="p-4 text-center text-slate-500">جاري جلب الفواتير...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="admin-settings" class="admin-tab hidden">
+                        <h2 class="text-3xl font-bold mb-6 text-slate-800">إعدادات الموقع</h2>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 max-w-2xl text-right">
+                            <div class="space-y-6">
+                                <div><label class="block text-sm font-medium text-slate-700 mb-1">رقم هاتف المبيعات (الواتساب)</label><input type="text" id="setting-phone" class="w-full p-2 border rounded focus:ring-blue-500 text-left" dir="ltr"></div>
+                                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-lg border">
+                                    <div><div class="font-bold text-slate-800">عرض التركيب المجاني</div><div class="text-sm text-slate-500">تفعيل ظهور لافتات التركيب المجاني في الموقع</div></div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="setting-free-install" class="sr-only peer" onchange="window.toggleInstallFee()">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] rtl:after:right-[2px] rtl:after:left-auto after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                <div id="install-fee-container" class="hidden">
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">تكلفة التركيب الإفتراضية عند الإلغاء (ج.م)</label>
+                                    <input type="number" id="setting-install-fee" class="w-full p-2 border rounded focus:ring-blue-500">
+                                </div>
+                                <button onclick="window.saveSettingsFirestore()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">حفظ الإعدادات</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
             </div>
         </div>
     </main>
 
     <footer class="bg-slate-900 text-slate-400 py-8 text-center" id="main-footer">
-        <div class="container mx-auto px-4"><p>&copy; 2026 روبوتك. جميع الحقوق محفوظة.</p></div>
+        <div class="container mx-auto px-4">
+            <h3 class="text-2xl font-bold text-white mb-4">RoboTech</h3>
+            <p class="mb-4">شركة حلول هندسية فاخرة ومضمونة للمنازل الذكية.</p>
+            <p>&copy; 2026 روبوتك. جميع الحقوق محفوظة.</p>
+        </div>
     </footer>
+    <a href="#" id="wa-float" class="whatsapp-float pulse" onclick="window.openWhatsApp('مرحباً روبوتك، محتاج مساعدة.')"><i class="fab fa-whatsapp"></i></a>
+
+    <div id="edit-prod-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white p-6 rounded-xl shadow-xl max-w-md w-full text-right">
+            <h3 class="text-2xl font-bold mb-4 border-b pb-2 text-slate-800" id="modal-prod-title">إضافة/تعديل منتج</h3>
+            <div class="space-y-4 overflow-y-auto max-h-[70vh] custom-scroll pr-2">
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">الاسم الوصفي</label><input type="text" id="modal-prod-name" class="w-full p-2 border rounded"></div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div><label class="block text-sm font-bold text-slate-700 mb-1">سعر الجملة (مخفي)</label><input type="number" id="modal-prod-cost" class="w-full p-2 border rounded bg-slate-50 border-slate-300"></div>
+                    <div><label class="block text-sm font-bold text-slate-700 mb-1">سعر البيع للعميل</label><input type="number" id="modal-prod-price" class="w-full p-2 border rounded border-blue-300"></div>
+                </div>
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">التصنيف</label>
+                    <select id="modal-prod-cat" class="w-full p-2 border rounded">
+                        <option value="switches">مفاتيح</option><option value="panels">شاشات</option><option value="locks">أقفال</option><option value="sensors">حساسات</option><option value="cameras">كاميرات</option><option value="other">أخرى</option>
+                    </select>
+                </div>
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">الوصف المبسط</label><textarea id="modal-prod-desc" rows="3" class="w-full p-2 border rounded text-sm"></textarea></div>
+            </div>
+            <div class="flex justify-end gap-3 mt-6">
+                <button onclick="document.getElementById('edit-prod-modal').classList.add('hidden')" class="px-5 py-2 border rounded-lg text-slate-600 font-bold">إلغاء</button>
+                <button onclick="window.saveProdToFirestore()" class="px-5 py-2 bg-blue-600 text-white rounded-lg font-bold" id="btn-save-prod">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-pkg-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white p-6 rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+            <h3 class="text-2xl font-bold mb-4 border-b pb-2 text-slate-800">إدارة الباقة</h3>
+            <div class="overflow-y-auto custom-scroll pr-2 space-y-4 flex-1 text-right">
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">اسم الباقة</label><input type="text" id="modal-pkg-name" class="w-full p-2 border rounded"></div>
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">وصف الباقة</label><textarea id="modal-pkg-desc" rows="2" class="w-full p-2 border rounded"></textarea></div>
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">السعر (ج.م)</label><input type="number" id="modal-pkg-price" class="w-full p-2 border rounded"></div>
+                
+                <h4 class="font-bold text-slate-700 mt-4 border-b pb-1">ربط الباقة بإجابات الاستبيان (يجب اختيار إجابة من كل نوع على الأقل ليتم ترشيحها):</h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs mb-4">
+                    <div class="p-2 border rounded bg-slate-50"><strong class="block mb-1">الهدف:</strong>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="راحة"> راحة</label>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="أمان"> أمان</label>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="توفير"> توفير</label>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="متكامل"> متكامل</label>
+                    </div>
+                    <div class="p-2 border rounded bg-slate-50"><strong class="block mb-1">الميزانية:</strong>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="اقتصادية"> اقتصادية</label>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="متوسطة"> متوسطة</label>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="مفتوحة"> مفتوحة</label>
+                    </div>
+                    <div class="p-2 border rounded bg-slate-50"><strong class="block mb-1">التشطيب:</strong>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="تأسيس"> تأسيس</label>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="متشطب"> متشطب</label>
+                    </div>
+                    <div class="p-2 border rounded bg-slate-50"><strong class="block mb-1">المساحة:</strong>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="صغيرة"> صغيرة</label>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="كبيرة"> كبيرة</label>
+                        <label class="block"><input type="checkbox" class="pkg-target" value="فيلا"> فيلا</label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2 border-b pb-1">اختر منتجات الباقة:</label>
+                    <div id="modal-pkg-products" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-40 overflow-y-auto custom-scroll p-2 border rounded bg-slate-50"></div>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-6 pt-4 border-t">
+                <button onclick="document.getElementById('edit-pkg-modal').classList.add('hidden')" class="px-5 py-2 border rounded-lg text-slate-600 font-bold">إلغاء</button>
+                <button onclick="window.savePkgToFirestore()" class="px-5 py-2 bg-blue-600 text-white rounded-lg font-bold" id="btn-save-pkg">حفظ التعديلات</button>
+            </div>
+        </div>
+    </div>
+
 
     <script type="module">
-        // 1. استيراد دوال الفايربيس (Firebase SDK v10/v11)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, addDoc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // 2. إعدادات مشروعك الحقيقية التي أرسلتها
         const firebaseConfig = {
             apiKey: "AIzaSyDYTvZhS-MmrxGNQ6ihoDx4sv_Q74qbUZ8",
             authDomain: "smart-bb35a.firebaseapp.com",
             projectId: "smart-bb35a",
             storageBucket: "smart-bb35a.firebasestorage.app",
             messagingSenderId: "648921056832",
-            appId: "1:648921056832:web:53b6a14f5bcbe087dc41a5",
-            measurementId: "G-3E92XMY1S2"
+            appId: "1:648921056832:web:53b6a14f5bcbe087dc41a5"
         };
 
-        // 3. تهيئة الفايربيس
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // 4. جعل الدوال متاحة للـ HTML (لأننا داخل module)
+        // Global Variables
+        window.siteData = { products: [], packages: [], invoices: [], settings: { whatsappNumber: "201000000000", freeInstall: true, installFee: 500 } };
+        const iconMap = { 'switches': 'fa-toggle-on', 'panels': 'fa-tablet-alt', 'locks': 'fa-lock', 'plugs': 'fa-plug', 'sensors': 'fa-wifi', 'cameras': 'fa-video', 'hubs': 'fa-network-wired', 'energy':'fa-bolt', 'other':'fa-microchip' };
+
+        // 1. Navigation & UI
         window.showPage = function(pageId) {
-            document.querySelectorAll('main > div').forEach(d => d.classList.add('hidden'));
+            document.querySelectorAll('.page-section').forEach(d => d.classList.add('hidden'));
             document.getElementById(pageId).classList.remove('hidden');
-            
-            // إخفاء الفوتر في شاشات الإدارة
             if(pageId === 'page-admin-login' || pageId === 'page-admin') {
                 document.getElementById('main-footer').classList.add('hidden');
                 document.getElementById('warranty-banner').classList.add('hidden');
+                document.getElementById('wa-float').classList.add('hidden');
             } else {
                 document.getElementById('main-footer').classList.remove('hidden');
                 document.getElementById('warranty-banner').classList.remove('hidden');
+                document.getElementById('wa-float').classList.remove('hidden');
             }
             window.scrollTo(0,0);
         };
 
-        window.startQuiz = function() { window.showPage('page-quiz'); };
-        window.showAdminLogin = function() { window.showPage('page-admin-login'); };
+        window.openWhatsApp = function(msg) { window.open(`https://wa.me/${window.siteData.settings.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank'); };
 
-        // 5. برمجة تسجيل الدخول (Firebase Auth)
+        // 2. Auth Logic
+        window.showAdminLogin = function() { window.showPage('page-admin-login'); };
         window.loginAdmin = function() {
             const email = document.getElementById('admin-email').value;
             const pass = document.getElementById('admin-pass').value;
-            const errorDiv = document.getElementById('login-error');
-            const btn = document.getElementById('login-btn');
-
-            if(!email || !pass) {
-                errorDiv.innerText = "يرجى إدخال البريد وكلمة المرور!";
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-
-            btn.innerText = "جاري الدخول...";
-            
-            signInWithEmailAndPassword(auth, email, pass)
-                .then((userCredential) => {
-                    // تم تسجيل الدخول بنجاح!
-                    btn.innerHTML = 'دخول <i class="fas fa-sign-in-alt"></i>';
-                    errorDiv.classList.add('hidden');
-                    window.showPage('page-admin');
-                })
-                .catch((error) => {
-                    btn.innerHTML = 'دخول <i class="fas fa-sign-in-alt"></i>';
-                    errorDiv.innerText = "بيانات الدخول غير صحيحة، يرجى التأكد والمحاولة.";
-                    errorDiv.classList.remove('hidden');
-                    console.error(error.message);
-                });
-        };
-
-        window.logoutAdmin = function() {
-            signOut(auth).then(() => {
-                window.showPage('home');
+            signInWithEmailAndPassword(auth, email, pass).then(() => { window.showPage('page-admin'); }).catch(e => {
+                document.getElementById('login-error').innerText = "بيانات الدخول غير صحيحة!";
+                document.getElementById('login-error').classList.remove('hidden');
             });
         };
+        window.logoutAdmin = function() { signOut(auth).then(() => window.showPage('page-home')); };
+        onAuthStateChanged(auth, user => { if(user) window.showAdminLogin = () => window.showPage('page-admin'); else window.showAdminLogin = () => window.showPage('page-admin-login'); });
 
-        // 6. مراقبة حالة المستخدم (إذا كان مسجلاً مسبقاً لا تطلب منه الباسورد مجدداً)
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // المستخدم مسجل دخول بالفعل
-                console.log("مدير النظام متواجد:", user.email);
-                // لو ضغط على زر الإدارة وهو مسجل، يفتح لوحة التحكم فوراً
-                window.showAdminLogin = function() { window.showPage('page-admin'); };
-            } else {
-                // لا يوجد مستخدم
-                window.showAdminLogin = function() { window.showPage('page-admin-login'); };
+        // 3. Fetch Data from Firestore
+        window.fetchData = async function() {
+            // Settings
+            const setDocRef = await getDoc(doc(db, "settings", "general"));
+            if(setDocRef.exists()) {
+                window.siteData.settings = setDocRef.data();
+                document.getElementById('setting-phone').value = window.siteData.settings.whatsappNumber;
+                document.getElementById('setting-free-install').checked = window.siteData.settings.freeInstall;
+                document.getElementById('setting-install-fee').value = window.siteData.settings.installFee;
+                window.toggleInstallFee();
             }
-        });
 
-        // بيانات وهمية مؤقتة للمنتجات حتى نربطها بـ Firestore في الخطوة القادمة
-        const tempProducts = [
-            { name: "مفتاح الإضاءة اللمسي (1 خط)", price: 800, desc: "تحكم ذكي في إضاءتك من الهاتف بلمسة أنيقة." },
-            { name: "قفل الأمان الرقمي المتعدد", price: 12000, desc: "افتح باب شقتك بالبصمة، الكارت، أو الرقم السري." },
-            { name: "الشاشة المركزية المصغرة", price: 4200, desc: "شاشة لمس أنيقة تجمع لك التحكم في كل إضاءة غرفتك." }
-        ];
+            // Products
+            const prodSnap = await getDocs(collection(db, "products"));
+            window.siteData.products = [];
+            prodSnap.forEach(d => window.siteData.products.push({ id: d.id, ...d.data() }));
+            window.renderFrontendProducts();
+            window.renderAdminProducts();
 
-        window.onload = () => {
-            const container = document.getElementById('products-container');
-            container.innerHTML = '';
-            tempProducts.forEach(p => {
+            // Packages
+            const pkgSnap = await getDocs(collection(db, "packages"));
+            window.siteData.packages = [];
+            pkgSnap.forEach(d => window.siteData.packages.push({ id: d.id, ...d.data() }));
+            window.renderAdminPackages();
+
+            // Invoices (Accounting)
+            const invSnap = await getDocs(collection(db, "invoices"));
+            window.siteData.invoices = [];
+            let totalSales = 0, totalCost = 0, totalExp = 0;
+            invSnap.forEach(d => {
+                let inv = d.data();
+                inv.id = d.id;
+                window.siteData.invoices.push(inv);
+                totalSales += inv.total; totalCost += inv.cost; totalExp += inv.expenses;
+            });
+            window.renderAccounting(totalSales, totalCost, totalExp);
+
+            // Populate POS Select
+            window.addInvoiceItemRow();
+        };
+
+        // 4. Render Logic
+        window.renderFrontendProducts = function() {
+            const container = document.getElementById('products-container'); container.innerHTML = '';
+            if(window.siteData.products.length === 0) { container.innerHTML = '<p class="col-span-full text-center">لا توجد منتجات حالياً.</p>'; return; }
+            
+            window.siteData.products.forEach(p => {
                 container.innerHTML += `
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col border border-slate-100">
-                        <div class="h-40 bg-slate-50 flex items-center justify-center text-blue-300 text-6xl border-b"><i class="fas fa-box"></i></div>
+                    <div onclick="window.showProductDetails('${p.id}')" class="cursor-pointer bg-white rounded-xl shadow-md overflow-hidden flex flex-col border border-slate-100 transform hover:-translate-y-1 transition">
+                        <div class="h-40 bg-slate-50 flex items-center justify-center text-blue-300 text-6xl border-b"><i class="fas ${iconMap[p.category] || 'fa-box'}"></i></div>
                         <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="font-bold text-lg text-slate-800 mb-2">${p.name}</h3>
-                            <p class="text-xs text-slate-500 mb-4 flex-1">${p.desc}</p>
+                            <h3 class="font-bold text-lg text-slate-800 mb-2 product-title">${p.name}</h3>
+                            <p class="text-xs text-slate-500 mb-4 flex-1 line-clamp-2">${p.desc}</p>
                             <div class="text-xl font-bold text-blue-600 border-t pt-4">${p.price} ج.م</div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
         };
+
+        window.filterProducts = function() {
+            const q = document.getElementById('product-search').value.toLowerCase();
+            document.querySelectorAll('.product-card').forEach(c => { c.style.display = c.querySelector('.product-title').innerText.toLowerCase().includes(q) ? 'flex' : 'none'; });
+        };
+
+        window.showProductDetails = function(id) {
+            const p = window.siteData.products.find(x => x.id === id); if(!p) return;
+            document.getElementById('product-details-content').innerHTML = `
+                <div class="w-full md:w-1/2 flex justify-center items-center bg-white rounded-xl h-96 shadow-sm"><i class="fas ${iconMap[p.category] || 'fa-box'} text-9xl text-blue-300"></i></div>
+                <div class="w-full md:w-1/2 flex flex-col justify-center">
+                    <h1 class="text-4xl font-bold text-slate-800 mb-4">${p.name}</h1>
+                    <div class="text-3xl font-bold text-blue-600 mb-6">${p.price} ج.م</div>
+                    <div class="bg-blue-50 border-r-4 border-blue-500 p-4 rounded-lg mb-6"><p class="text-slate-700 text-lg leading-relaxed">${p.desc}</p></div>
+                    <button onclick="window.openWhatsApp('مرحباً أود طلب منتج: ${p.name}')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl flex justify-center items-center gap-2 text-xl"><i class="fab fa-whatsapp"></i> اطلب الآن</button>
+                </div>`;
+            window.showPage('page-product-details');
+        };
+
+        // 5. Quiz Logic
+        const quizQ = [
+            { id: "q1", text: "1. الهدف من النظام الذكي؟", opts: [{l: "الراحة", v: "راحة"}, {l: "الأمان", v: "أمان"}, {l: "توفير", v: "توفير"}, {l: "متكامل", v: "متكامل"}] },
+            { id: "q2", text: "2. الميزانية المحددة؟", opts: [{l: "اقتصادية", v: "اقتصادية"}, {l: "متوسطة", v: "متوسطة"}, {l: "مفتوحة (VIP)", v: "مفتوحة"}] },
+            { id: "q3", text: "3. مرحلة العقار؟", opts: [{l: "تأسيس", v: "تأسيس"}, {l: "متشطب", v: "متشطب"}] },
+            { id: "q4", text: "4. مساحة المكان؟", opts: [{l: "صغيرة", v: "صغيرة"}, {l: "كبيرة", v: "كبيرة"}, {l: "فيلا", v: "فيلا"}] }
+        ];
+        let currQ=0, userAns={};
+        window.startQuiz = function() { window.showPage('page-quiz'); currQ=0; userAns={}; document.getElementById('quiz-result').classList.add('hidden'); document.getElementById('quiz-container').classList.remove('hidden'); document.getElementById('submit-btn').classList.add('hidden'); document.getElementById('next-btn').classList.remove('hidden'); renderQ(); };
+        function renderQ() {
+            const q = quizQ[currQ]; document.getElementById('question-text').innerText = q.text; const area = document.getElementById('options-area'); area.innerHTML = '';
+            q.opts.forEach(o => {
+                const act = userAns[q.id] === o.v ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200';
+                area.innerHTML += `<div onclick="window.selectOpt('${q.id}', '${o.v}')" class="cursor-pointer border-2 ${act} rounded-xl p-4 text-center font-bold">${o.l}</div>`;
+            });
+            document.getElementById('quiz-counter').innerText = `${currQ+1} / ${quizQ.length}`; document.getElementById('quiz-progress').style.width = `${((currQ+1)/quizQ.length)*100}%`;
+            if(userAns[q.id]) { if(currQ === quizQ.length-1) { document.getElementById('submit-btn').classList.remove('hidden'); document.getElementById('next-btn').classList.add('hidden'); } }
+        }
+        window.selectOpt = function(qid, v) { userAns[qid] = v; renderQ(); if(currQ < quizQ.length-1) setTimeout(()=> { currQ++; renderQ(); }, 300); };
+        window.prevQuestion = function() { if(currQ>0) { currQ--; renderQ(); document.getElementById('submit-btn').classList.add('hidden'); document.getElementById('next-btn').classList.remove('hidden'); } };
+        window.nextQuestion = function() { if(currQ<quizQ.length-1 && userAns[quizQ[currQ].id]) { currQ++; renderQ(); } };
+        window.submitQuiz = function() {
+            // Find best package match based on target array
+            let bestPkg = window.siteData.packages.find(p => p.target && p.target.includes(userAns.q1) && p.target.includes(userAns.q2));
+            if(!bestPkg && window.siteData.packages.length > 0) bestPkg = window.siteData.packages[0]; // fallback
+            
+            document.getElementById('quiz-container').classList.add('hidden'); document.getElementById('quiz-result').classList.remove('hidden');
+            if(bestPkg) {
+                document.getElementById('result-pkg-name').innerText = bestPkg.name;
+                document.getElementById('result-pkg-desc').innerText = bestPkg.desc;
+                document.getElementById('result-pkg-price').innerText = bestPkg.price;
+                window.recommendedPkgName = bestPkg.name;
+            } else {
+                document.getElementById('result-pkg-name').innerText = "باقة مخصصة";
+                document.getElementById('result-pkg-desc').innerText = "سيقوم المهندس بتفصيل باقة خصيصاً لك.";
+                document.getElementById('result-pkg-price').innerText = "يحدد لاحقاً";
+                window.recommendedPkgName = "باقة مخصصة";
+            }
+        };
+        window.sendQuizWhatsApp = function() { window.openWhatsApp(`مرحباً روبوتك، أجريت الاستبيان.\nالنتيجة المرشحة: *(${window.recommendedPkgName})*\nالإجابات: ${userAns.q1}, ${userAns.q2}, ${userAns.q3}, ${userAns.q4}\nمطلوب معاينة مجانية.`); };
+
+        // 6. Admin Panel Functions
+        window.switchAdminTab = function(t) { document.querySelectorAll('.admin-tab').forEach(d => d.classList.add('hidden')); document.querySelectorAll('aside nav a').forEach(a => a.classList.remove('bg-slate-700')); document.getElementById(`admin-${t}`).classList.remove('hidden'); document.getElementById(`tab-${t}`).classList.add('bg-slate-700'); };
+        
+        // Products CRUD
+        window.renderAdminProducts = function() {
+            const tb = document.getElementById('admin-products-table'); tb.innerHTML = '';
+            document.getElementById('stat-products-count').innerText = window.siteData.products.length;
+            window.siteData.products.forEach((p, i) => {
+                tb.innerHTML += `<tr class="border-b hover:bg-slate-50"><td class="p-3">${i+1}</td><td class="p-3 font-bold text-slate-800">${p.name}</td><td class="p-3 text-slate-500">${p.costPrice || 0}</td><td class="p-3 text-blue-600 font-bold">${p.price}</td><td class="p-3"><button onclick="window.openEditProdModal('${p.id}')" class="text-blue-600"><i class="fas fa-edit"></i></button></td></tr>`;
+            });
+        };
+
+        let currProdId = null;
+        window.openEditProdModal = function(id) {
+            currProdId = id;
+            if(id) {
+                let p = window.siteData.products.find(x => x.id === id);
+                document.getElementById('modal-prod-title').innerText = "تعديل منتج";
+                document.getElementById('modal-prod-name').value = p.name; document.getElementById('modal-prod-cost').value = p.costPrice || 0;
+                document.getElementById('modal-prod-price').value = p.price; document.getElementById('modal-prod-desc').value = p.desc;
+                document.getElementById('modal-prod-cat').value = p.category || 'switches';
+            } else {
+                document.getElementById('modal-prod-title').innerText = "منتج جديد";
+                document.getElementById('modal-prod-name').value = ""; document.getElementById('modal-prod-cost').value = "";
+                document.getElementById('modal-prod-price').value = ""; document.getElementById('modal-prod-desc').value = "";
+            }
+            document.getElementById('edit-prod-modal').classList.remove('hidden');
+        };
+
+        window.saveProdToFirestore = async function() {
+            const btn = document.getElementById('btn-save-prod'); btn.innerText = "جاري الحفظ...";
+            const data = {
+                name: document.getElementById('modal-prod-name').value,
+                costPrice: parseFloat(document.getElementById('modal-prod-cost').value) || 0,
+                price: parseFloat(document.getElementById('modal-prod-price').value) || 0,
+                desc: document.getElementById('modal-prod-desc').value,
+                category: document.getElementById('modal-prod-cat').value
+            };
+            if(currProdId) { await updateDoc(doc(db, "products", currProdId), data); } 
+            else { await addDoc(collection(db, "products"), data); }
+            document.getElementById('edit-prod-modal').classList.add('hidden'); btn.innerText = "حفظ";
+            window.fetchData(); // Reload all data
+        };
+
+        // Packages CRUD
+        window.renderAdminPackages = function() {
+            const list = document.getElementById('admin-packages-list'); list.innerHTML = '';
+            window.siteData.packages.forEach(pkg => {
+                list.innerHTML += `<div class="bg-white p-5 rounded-xl border flex justify-between items-center"><div><h4 class="font-bold text-lg">${pkg.name}</h4><div class="text-blue-600 font-bold">${pkg.price} ج.م</div></div><button onclick="window.openEditPkgModal('${pkg.id}')" class="text-blue-600 bg-blue-50 px-3 py-1 rounded">إدارة</button></div>`;
+            });
+        };
+
+        let currPkgId = null;
+        window.openEditPkgModal = function(id) {
+            currPkgId = id; const pList = document.getElementById('modal-pkg-products'); pList.innerHTML = '';
+            document.querySelectorAll('.pkg-target').forEach(c => c.checked = false);
+            if(id) {
+                let pkg = window.siteData.packages.find(x => x.id === id);
+                document.getElementById('modal-pkg-name').value = pkg.name; document.getElementById('modal-pkg-desc').value = pkg.desc; document.getElementById('modal-pkg-price').value = pkg.price;
+                if(pkg.target) pkg.target.forEach(t => { let cb = document.querySelector(`.pkg-target[value="${t}"]`); if(cb) cb.checked = true; });
+                window.siteData.products.forEach(p => { pList.innerHTML += `<label class="block p-1"><input type="checkbox" class="pkg-prod-cb" value="${p.id}" ${pkg.products && pkg.products.includes(p.id) ? 'checked':''}> ${p.name}</label>`; });
+            } else {
+                document.getElementById('modal-pkg-name').value = ""; document.getElementById('modal-pkg-desc').value = ""; document.getElementById('modal-pkg-price').value = "";
+                window.siteData.products.forEach(p => { pList.innerHTML += `<label class="block p-1"><input type="checkbox" class="pkg-prod-cb" value="${p.id}"> ${p.name}</label>`; });
+            }
+            document.getElementById('edit-pkg-modal').classList.remove('hidden');
+        };
+
+        window.savePkgToFirestore = async function() {
+            const btn = document.getElementById('btn-save-pkg'); btn.innerText = "جاري الحفظ...";
+            const targets = Array.from(document.querySelectorAll('.pkg-target:checked')).map(c => c.value);
+            const prods = Array.from(document.querySelectorAll('.pkg-prod-cb:checked')).map(c => c.value);
+            const data = {
+                name: document.getElementById('modal-pkg-name').value, desc: document.getElementById('modal-pkg-desc').value,
+                price: parseFloat(document.getElementById('modal-pkg-price').value)||0, target: targets, products: prods
+            };
+            if(currPkgId) { await updateDoc(doc(db, "packages", currPkgId), data); } else { await addDoc(collection(db, "packages"), data); }
+            document.getElementById('edit-pkg-modal').classList.add('hidden'); btn.innerText = "حفظ التعديلات"; window.fetchData();
+        };
+
+        // POS & Invoicing
+        let invCount = 0;
+        window.addInvoiceItemRow = function() {
+            invCount++;
+            let opts = window.siteData.products.map(p => `<option value="${p.id}">${p.name} (${p.price} ج.م)</option>`).join('');
+            document.getElementById('invoice-items').insertAdjacentHTML('beforeend', `<div class="flex gap-2 items-center" id="inv-row-${invCount}"><select class="flex-1 p-2 border rounded inv-sel" onchange="window.calcInvoiceTotal()"><option value="0">-- اختر المنتج --</option>${opts}</select><input type="number" value="1" min="1" class="w-16 p-2 border rounded inv-qty text-center" onchange="window.calcInvoiceTotal()"><button onclick="document.getElementById('inv-row-${invCount}').remove(); window.calcInvoiceTotal();" class="text-red-500 bg-red-50 p-2 rounded"><i class="fas fa-trash"></i></button></div>`);
+        };
+
+        window.calcInvoiceTotal = function() {
+            let totalSales=0, totalCost=0;
+            document.querySelectorAll('#invoice-items > div').forEach(row => {
+                const pId = row.querySelector('.inv-sel').value; const qty = parseInt(row.querySelector('.inv-qty').value)||0;
+                if(pId !== "0") { let p = window.siteData.products.find(x => x.id === pId); totalSales += (p.price*qty); totalCost += ((p.costPrice||0)*qty); }
+            });
+            if(!window.siteData.settings.freeInstall) totalSales += window.siteData.settings.installFee;
+            const discount = totalSales * ((parseFloat(document.getElementById('inv-discount').value)||0)/100);
+            const finalTotal = totalSales - discount;
+            const expenses = parseFloat(document.getElementById('inv-expenses').value)||0;
+            const profit = finalTotal - totalCost - expenses;
+
+            document.getElementById('inv-subtotal').innerText = totalSales + " ج.م";
+            document.getElementById('inv-total').innerText = finalTotal + " ج.م";
+            document.getElementById('inv-profit').innerText = profit + " ج.م";
+            return { total: finalTotal, cost: totalCost, exp: expenses, profit: profit, disc: discount };
+        };
+
+        window.generateInvoice = function() {
+            const data = window.calcInvoiceTotal();
+            document.getElementById('prev-name').innerText = document.getElementById('inv-name').value || "عميل نقدي";
+            document.getElementById('prev-date').innerText = new Date().toLocaleDateString('ar-EG');
+            const tbody = document.getElementById('prev-items'); tbody.innerHTML = '';
+            document.querySelectorAll('#invoice-items > div').forEach(row => {
+                const sel = row.querySelector('.inv-sel');
+                if(sel.value !== "0") { let p = window.siteData.products.find(x => x.id === sel.value); tbody.innerHTML += `<tr><td class="py-1">${p.name}</td><td>${row.querySelector('.inv-qty').value}</td><td>${p.price}</td></tr>`; }
+            });
+            if(!window.siteData.settings.freeInstall) tbody.innerHTML += `<tr><td class="py-1 text-amber-600">رسوم تركيب</td><td>1</td><td>${window.siteData.settings.installFee}</td></tr>`;
+            document.getElementById('prev-total').innerText = data.total;
+            document.getElementById('invoice-preview').style.display = 'block';
+        };
+
+        window.saveInvoiceToFirestore = async function() {
+            const data = window.calcInvoiceTotal(); if(data.total <= 0) { alert("الفاتورة فارغة"); return; }
+            await addDoc(collection(db, "invoices"), {
+                client: document.getElementById('inv-name').value || "عميل نقدي",
+                phone: document.getElementById('inv-phone').value,
+                total: data.total, cost: data.cost, expenses: data.exp, profit: data.profit,
+                timestamp: new Date().toLocaleDateString('ar-EG')
+            });
+            alert("تم حفظ الفاتورة في الحسابات."); document.getElementById('inv-name').value = ''; document.getElementById('invoice-items').innerHTML = ''; window.addInvoiceItemRow(); window.calcInvoiceTotal(); window.fetchData();
+        };
+
+        window.sendInvoiceWhatsApp = function() { window.openWhatsApp(`فاتورة من RoboTech\nالعميل: ${document.getElementById('prev-name').innerText}\nالمطلوب دفعه: ${document.getElementById('prev-total').innerText} ج.م\nالضمان: استبدال القطع وصيانتها.`); };
+
+        // 7. Accounting
+        window.renderAccounting = function(tSales, tCost, tExp) {
+            document.getElementById('acc-sales').innerText = tSales + " ج.م"; document.getElementById('acc-cost').innerText = tCost + " ج.م";
+            document.getElementById('acc-expenses').innerText = tExp + " ج.م"; document.getElementById('acc-profit').innerText = (tSales - tCost - tExp) + " ج.م";
+            document.getElementById('stat-sales-total').innerText = tSales + " ج.م";
+            const tb = document.getElementById('accounting-table'); tb.innerHTML = '';
+            window.siteData.invoices.forEach(inv => {
+                tb.innerHTML += `<tr class="border-b"><td class="p-2">${inv.timestamp}</td><td class="p-2">${inv.client}</td><td class="p-2">${inv.total}</td><td class="p-2 text-red-500">${inv.cost}</td><td class="p-2 text-amber-500">${inv.expenses}</td><td class="p-2 text-green-600 font-bold">${inv.profit}</td></tr>`;
+            });
+        };
+
+        // 8. Settings
+        window.toggleInstallFee = function() {
+            const isFree = document.getElementById('setting-free-install').checked;
+            document.getElementById('install-fee-container').classList.toggle('hidden', isFree);
+            document.getElementById('hero-installation-text').innerText = isFree ? "التركيب مجاني لفترة محدودة." : "وفريق تركيب محترف.";
+            document.getElementById('stat-install-status').innerText = isFree ? "مجاني" : "مدفوع";
+        };
+
+        window.saveSettingsFirestore = async function() {
+            const data = {
+                whatsappNumber: document.getElementById('setting-phone').value,
+                freeInstall: document.getElementById('setting-free-install').checked,
+                installFee: parseFloat(document.getElementById('setting-install-fee').value) || 0
+            };
+            await setDoc(doc(db, "settings", "general"), data);
+            alert("تم حفظ الإعدادات بنجاح"); window.fetchData();
+        };
+
+        // 9. Excel Upload/Download
+        window.downloadExcelTemplate = function() {
+            if(typeof XLSX === 'undefined') return;
+            const wsData = window.siteData.products.map(p => ({ "ID": p.id, "الاسم": p.name, "التكلفة": p.costPrice||0, "البيع": p.price, "الوصف": p.desc, "التصنيف": p.category||'other' }));
+            XLSX.writeFile(XLSX.utils.book_append_sheet(XLSX.utils.book_new(), XLSX.utils.json_to_sheet(wsData), "Products"), "RoboTech_Products.xlsx");
+        };
+
+        window.handleExcelUpload = function(e) {
+            if(typeof XLSX === 'undefined') return; const reader = new FileReader();
+            reader.onload = async function(evt) {
+                const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets["Products"]);
+                if(json.length > 0) {
+                    alert("جاري رفع المنتجات، يرجى الانتظار...");
+                    for(let r of json) {
+                        const data = { name: r["الاسم"], costPrice: parseFloat(r["التكلفة"])||0, price: parseFloat(r["البيع"])||0, desc: r["الوصف"]||'', category: r["التصنيف"]||'other' };
+                        if(r["ID"]) await updateDoc(doc(db, "products", r["ID"].toString()), data); else await addDoc(collection(db, "products"), data);
+                    }
+                    alert("تم الرفع بنجاح!"); window.fetchData();
+                }
+            }; reader.readAsArrayBuffer(e.target.files[0]);
+        };
+
+        // Start App
+        window.onload = () => { window.fetchData(); };
     </script>
 </body>
 </html>
