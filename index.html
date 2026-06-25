@@ -67,7 +67,6 @@
     </header>
 
     <main id="main-content">
-        <!-- ================= الصفحة الرئيسية ================= -->
         <div id="page-home" class="page-section">
             <section class="hero-bg text-white py-20 md:py-32 text-center px-4 relative flex flex-col justify-center items-center min-h-[60vh]">
                 <div class="max-w-3xl mx-auto relative z-10 w-full">
@@ -92,17 +91,14 @@
                 </div>
             </section>
 
-            <!-- قسم الباقات في الرئيسية -->
             <section id="packages-section" class="py-16 bg-white border-t hidden">
                 <div class="container mx-auto px-4">
                     <h2 class="text-3xl font-bold text-slate-800 mb-10 text-center">عروض الباقات المتكاملة</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="home-packages-container">
-                        <!-- الباقات تظهر هنا -->
-                    </div>
+                        </div>
                 </div>
             </section>
 
-            <!-- قسم المنتجات -->
             <section id="products-section" class="py-16 bg-slate-50 border-t">
                 <div class="container mx-auto px-4">
                     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
@@ -119,7 +115,6 @@
             </section>
         </div>
 
-        <!-- ================= 2. تفاصيل المنتج ================= -->
         <div id="page-product-details" class="hidden page-section py-16 bg-white min-h-screen">
              <div class="container mx-auto px-4">
                 <button onclick="window.showPage('page-home')" class="mb-6 text-blue-600 font-semibold flex items-center gap-2"><i class="fas fa-arrow-right"></i> العودة للمنتجات</button>
@@ -127,7 +122,6 @@
              </div>
         </div>
 
-        <!-- ================= 3. الاستبيان ================= -->
         <div id="page-quiz" class="hidden page-section py-12 md:py-16 bg-slate-50 min-h-screen">
             <div class="max-w-3xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg m-4" id="quiz-container">
                 <h2 class="text-2xl md:text-3xl font-bold text-blue-600 mb-8 text-center">استبيان روبوتك الذكي</h2>
@@ -161,7 +155,6 @@
             </div>
         </div>
 
-        <!-- ================= 4. الدخول للإدارة ================= -->
         <div id="page-admin-login" class="hidden page-section min-h-screen bg-slate-800 flex items-center justify-center p-4">
             <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
                 <h2 class="text-2xl font-bold mb-6 text-slate-800">دخول الإدارة</h2>
@@ -173,10 +166,8 @@
             </div>
         </div>
 
-        <!-- ================= 5. لوحة التحكم ================= -->
         <div id="page-admin" class="hidden page-section bg-slate-100 min-h-screen">
             <div class="flex h-screen overflow-hidden flex-col md:flex-row">
-                <!-- الشريط الجانبي (قائمة الإدارة) -->
                 <aside class="w-full md:w-64 bg-slate-800 text-white flex flex-col md:h-full overflow-y-auto">
                     <div class="p-4 md:p-6 text-lg md:text-xl font-bold border-b border-slate-700 flex justify-between items-center">
                         <span>RoboTech Admin</span>
@@ -193,7 +184,6 @@
                 </aside>
 
                 <main class="flex-1 overflow-y-auto p-4 md:p-8" id="admin-content-area">
-                    <!-- المنتجات -->
                     <div id="admin-products" class="admin-tab">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                             <h2 class="text-2xl md:text-3xl font-bold">المنتجات</h2>
@@ -204,7 +194,6 @@
                         </div>
                     </div>
 
-                    <!-- الباقات -->
                     <div id="admin-packages" class="admin-tab hidden">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                             <h2 class="text-2xl md:text-3xl font-bold">إدارة الباقات</h2>
@@ -213,7 +202,6 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4" id="admin-packages-list"></div>
                     </div>
 
-                    <!-- POS -->
                     <div id="admin-invoice" class="admin-tab hidden">
                         <h2 class="text-2xl md:text-3xl font-bold mb-6">إنشاء فاتورة (POS)</h2>
                         <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm">
@@ -241,7 +229,6 @@
                         </div>
                     </div>
 
-                    <!-- معاينة الفاتورة للطباعة (PDF) -->
                     <div id="invoice-preview" class="hidden admin-tab">
                         <div class="flex justify-between items-center mb-4">
                             <button onclick="window.switchAdminTab('invoice')" class="text-slate-600 font-bold"><i class="fas fa-arrow-right"></i> عودة للـ POS</button>
@@ -271,7 +258,6 @@
                         </div>
                     </div>
 
-                    <!-- الحسابات -->
                     <div id="admin-accounting" class="admin-tab hidden">
                         <h2 class="text-2xl md:text-3xl font-bold mb-6">الحسابات والأرباح</h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
@@ -292,7 +278,6 @@
                         </div>
                     </div>
 
-                    <!-- الإعدادات -->
                     <div id="admin-settings" class="admin-tab hidden">
                         <h2 class="text-2xl md:text-3xl font-bold mb-6">الإعدادات</h2>
                         <div class="bg-white p-6 rounded-xl shadow-sm max-w-lg">
@@ -317,29 +302,68 @@
     <footer class="bg-slate-900 text-slate-400 py-6 md:py-8 text-center" id="main-footer"><p class="text-sm md:text-base">&copy; 2026 روبوتك. جميع الحقوق محفوظة.</p></footer>
     <a href="#" id="wa-float" class="whatsapp-float pulse" onclick="window.openWhatsApp('مرحباً روبوتك')"><i class="fab fa-whatsapp"></i></a>
 
-    <!-- مودال المنتج -->
     <div id="edit-prod-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-white p-6 rounded-xl shadow-xl max-w-md w-full text-right flex flex-col max-h-[90vh]">
+        <div class="bg-white p-6 rounded-xl shadow-xl max-w-lg w-full text-right flex flex-col max-h-[95vh]">
             <h3 class="text-xl md:text-2xl font-bold mb-4 border-b pb-2" id="modal-prod-title">إضافة/تعديل منتج</h3>
             <div class="space-y-4 overflow-y-auto custom-scroll pr-2 flex-1">
-                <div><label class="font-bold text-sm">صورة من جهازك</label><input type="file" onchange="window.uploadImageToImgBB(event)" class="text-sm w-full border p-1 rounded mt-1">
-                <input type="hidden" id="modal-prod-img-url"><div id="upload-status" class="text-xs text-blue-600 mt-1 font-bold"></div></div>
-                <div><label class="font-bold text-sm">الاسم</label><input type="text" id="modal-prod-name" class="w-full p-2 border rounded"></div>
-                <div class="flex gap-2">
-                    <div class="flex-1"><label class="font-bold text-sm">جملة (عليك)</label><input type="number" id="modal-prod-cost" class="w-full p-2 border rounded bg-slate-50"></div>
-                    <div class="flex-1"><label class="font-bold text-sm">بيع (للعميل)</label><input type="number" id="modal-prod-price" class="w-full p-2 border rounded border-blue-300"></div>
+                
+                <div class="bg-slate-50 p-3 rounded border">
+                    <label class="font-bold text-sm block mb-2 text-slate-700">صور المنتج (حتى 3 صور)</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="border rounded p-2 text-center bg-white relative">
+                            <div class="w-full h-16 bg-slate-100 rounded mb-2 flex items-center justify-center overflow-hidden">
+                                <img id="modal-prod-img-preview-0" class="hidden object-cover w-full h-full">
+                                <i id="modal-prod-img-icon-0" class="fas fa-image text-slate-300 text-2xl"></i>
+                            </div>
+                            <label class="cursor-pointer bg-blue-50 text-blue-600 hover:bg-blue-100 px-2 py-1 rounded text-xs font-bold w-full block transition border border-blue-100">
+                                <i class="fas fa-upload"></i> رفع
+                                <input type="file" class="hidden" accept="image/*" onchange="window.uploadImageToImgBB(event, 0)">
+                            </label>
+                            <input type="hidden" id="modal-prod-img-url-0">
+                            <div id="upload-status-0" class="text-[10px] mt-1 hidden font-bold"></div>
+                        </div>
+                        <div class="border rounded p-2 text-center bg-white relative">
+                            <div class="w-full h-16 bg-slate-100 rounded mb-2 flex items-center justify-center overflow-hidden">
+                                <img id="modal-prod-img-preview-1" class="hidden object-cover w-full h-full">
+                                <i id="modal-prod-img-icon-1" class="fas fa-image text-slate-300 text-2xl"></i>
+                            </div>
+                            <label class="cursor-pointer bg-blue-50 text-blue-600 hover:bg-blue-100 px-2 py-1 rounded text-xs font-bold w-full block transition border border-blue-100">
+                                <i class="fas fa-upload"></i> رفع
+                                <input type="file" class="hidden" accept="image/*" onchange="window.uploadImageToImgBB(event, 1)">
+                            </label>
+                            <input type="hidden" id="modal-prod-img-url-1">
+                            <div id="upload-status-1" class="text-[10px] mt-1 hidden font-bold"></div>
+                        </div>
+                        <div class="border rounded p-2 text-center bg-white relative">
+                            <div class="w-full h-16 bg-slate-100 rounded mb-2 flex items-center justify-center overflow-hidden">
+                                <img id="modal-prod-img-preview-2" class="hidden object-cover w-full h-full">
+                                <i id="modal-prod-img-icon-2" class="fas fa-image text-slate-300 text-2xl"></i>
+                            </div>
+                            <label class="cursor-pointer bg-blue-50 text-blue-600 hover:bg-blue-100 px-2 py-1 rounded text-xs font-bold w-full block transition border border-blue-100">
+                                <i class="fas fa-upload"></i> رفع
+                                <input type="file" class="hidden" accept="image/*" onchange="window.uploadImageToImgBB(event, 2)">
+                            </label>
+                            <input type="hidden" id="modal-prod-img-url-2">
+                            <div id="upload-status-2" class="text-[10px] mt-1 hidden font-bold"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div><label class="font-bold text-sm">الاسم الوصفي</label><input type="text" id="modal-prod-name" class="w-full p-2 border rounded font-bold text-blue-800"></div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div><label class="font-bold text-sm text-slate-500">جملة (عليك)</label><input type="number" id="modal-prod-cost" class="w-full p-2 border rounded bg-slate-50"></div>
+                    <div><label class="font-bold text-sm text-green-600">بيع (للعميل)</label><input type="number" id="modal-prod-price" class="w-full p-2 border-2 rounded border-green-300 font-bold"></div>
                 </div>
                 <div><label class="font-bold text-sm">التصنيف</label><select id="modal-prod-cat" class="w-full p-2 border rounded bg-slate-50"><option value="switches">مفاتيح/برايز</option><option value="locks">أقفال أمان</option><option value="sensors">حساسات</option><option value="panels">شاشات/بوابات</option><option value="cameras">كاميرات</option><option value="other">أخرى</option></select></div>
                 <div><label class="font-bold text-sm">وصف الفائدة للعميل</label><textarea id="modal-prod-desc" rows="3" class="w-full p-2 border rounded text-sm"></textarea></div>
             </div>
             <div class="flex justify-end gap-3 mt-4 pt-4 border-t">
                 <button onclick="document.getElementById('edit-prod-modal').classList.add('hidden')" class="px-5 py-2 border rounded font-bold text-slate-600">إلغاء</button>
-                <button onclick="window.saveProdToFirestore()" class="px-5 py-2 bg-blue-600 text-white rounded font-bold shadow">حفظ المنتج</button>
+                <button onclick="window.saveProdToFirestore()" id="btn-save-prod" class="px-5 py-2 bg-blue-600 text-white rounded font-bold shadow">حفظ المنتج</button>
             </div>
         </div>
     </div>
 
-    <!-- مودال الباقة المتطور (ديناميكي) -->
     <div id="edit-pkg-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50 p-2 md:p-4">
         <div class="bg-white p-4 md:p-6 rounded-xl shadow-xl max-w-2xl w-full text-right flex flex-col max-h-[95vh]">
             <h3 class="text-xl font-bold mb-3 border-b pb-2">بناء وتعديل الباقة</h3>
@@ -349,15 +373,11 @@
                     <input type="text" id="modal-pkg-name" class="w-full p-2 border rounded font-bold text-blue-600">
                 </div>
                 
-                <!-- اختيار المنتجات والكميات -->
                 <div class="mb-4 bg-slate-50 border rounded p-2 md:p-3">
                     <label class="font-bold block border-b pb-2 mb-2 text-sm text-blue-800"><i class="fas fa-boxes"></i> 1. حدد المنتجات والكمية داخل الباقة:</label>
-                    <div id="modal-pkg-products" class="max-h-48 overflow-y-auto custom-scroll text-sm flex flex-col gap-1 border border-slate-200 bg-white p-1 rounded">
-                        <!-- تُضاف بالجافاسكريبت -->
-                    </div>
+                    <div id="modal-pkg-products" class="max-h-48 overflow-y-auto custom-scroll text-sm flex flex-col gap-1 border border-slate-200 bg-white p-1 rounded"></div>
                 </div>
 
-                <!-- حساب السعر -->
                 <div class="grid grid-cols-2 gap-3 mb-4 border-b pb-4">
                     <div class="bg-slate-100 p-2 rounded text-center border">
                         <label class="font-bold text-slate-500 text-xs block mb-1">إجمالي المنتجات بدون خصم</label>
@@ -397,13 +417,11 @@
         </div>
     </div>
 
-    <!-- جافاسكريبت والفايربيس -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, getDocs, getDoc, doc, setDoc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // بيانات اتصال فايربيس الخاصة بك
         const app = initializeApp({
             apiKey: "AIzaSyDYTvZhS-MmrxGNQ6ihoDx4sv_Q74qbUZ8",
             authDomain: "smart-bb35a.firebaseapp.com",
@@ -416,7 +434,7 @@
         const IMGBB_KEY = "cdbaea2ebcfed2927fc092e0df791986";
 
         window.siteData = { products: [], packages: [], invoices: [], settings: { whatsappNumber: "201000000000", freeInstall: true, installFee: 500 } };
-        window.tempPkgProducts = {}; // لتخزين كميات منتجات الباقة أثناء التعديل
+        window.tempPkgProducts = {}; 
 
         window.showPage = id => { document.querySelectorAll('.page-section').forEach(d => d.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); window.scrollTo(0,0); };
         window.openWhatsApp = msg => window.open(`https://wa.me/${window.siteData.settings.whatsappNumber}?text=${encodeURIComponent(msg)}`);
@@ -453,13 +471,14 @@
             } catch(e) { console.log("Error Fetching Data:", e); }
         };
 
-        // ================= المنتجات للعميل =================
         window.renderFrontendProducts = () => {
             const cont = document.getElementById('products-container'); cont.innerHTML = '';
+            if(!Array.isArray(window.siteData.products)) window.siteData.products = [];
             let visProds = window.siteData.products.filter(p => !p.isHidden);
             if(visProds.length === 0) { cont.innerHTML = '<p class="col-span-full text-center">لا توجد منتجات حالياً.</p>'; return; }
             visProds.forEach(p => {
-                let img = p.imgUrl ? `<img src="${p.imgUrl}" class="product-img">` : `<div class="product-img-placeholder"><i class="fas fa-box"></i></div>`;
+                let displayUrl = (p.images && p.images.length > 0) ? p.images[0] : (p.imgUrl ? p.imgUrl : null);
+                let img = displayUrl ? `<img src="${displayUrl}" class="product-img">` : `<div class="product-img-placeholder"><i class="fas fa-box"></i></div>`;
                 cont.innerHTML += `<div onclick="window.showProductDetails('${p.id}')" class="cursor-pointer bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col hover:shadow-md transition"><div class="h-48 border-b overflow-hidden rounded-t-xl">${img}</div><div class="p-4 flex-1 flex flex-col"><h3 class="font-bold text-slate-800 text-sm md:text-base leading-tight">${p.name}</h3><div class="text-blue-600 font-bold mt-auto pt-3 text-lg">${p.price} ج.م</div></div></div>`;
             });
         };
@@ -469,17 +488,37 @@
             document.querySelectorAll('#products-container > div').forEach(c => { c.style.display = c.innerText.toLowerCase().includes(q) ? 'flex' : 'none'; });
         };
 
+        window.changeMainImg = (url) => { document.getElementById('detail-main-img').src = url; };
+
         window.showProductDetails = id => {
             const p = window.siteData.products.find(x => x.id === id); if(!p) return;
-            let img = p.imgUrl ? `<img src="${p.imgUrl}" class="w-full h-full object-contain rounded">` : `<i class="fas fa-box text-9xl text-blue-300"></i>`;
-            document.getElementById('product-details-content').innerHTML = `<div class="w-full md:w-1/2 bg-white h-64 md:h-96 flex items-center justify-center p-2 border rounded-xl shadow-sm overflow-hidden">${img}</div><div class="w-full md:w-1/2 flex flex-col justify-center"><h1 class="text-2xl md:text-3xl font-bold mb-4 text-slate-800">${p.name}</h1><div class="text-2xl text-blue-600 font-bold mb-4 bg-blue-50 inline-block p-2 rounded w-max">${p.price} ج.م</div><p class="mb-6 leading-relaxed text-slate-600 text-sm md:text-base">${p.desc||''}</p><button onclick="window.openWhatsApp('أريد طلب منتج: ${p.name}')" class="bg-green-500 text-white font-bold py-4 rounded-xl text-lg shadow-md hover:bg-green-600 transition"><i class="fab fa-whatsapp"></i> اطلب عبر الواتساب</button></div>`;
+            let imgs = p.images && p.images.length > 0 ? p.images : (p.imgUrl ? [p.imgUrl] : []);
+            
+            let imgGallery = '';
+            if(imgs.length > 0) {
+                imgGallery = `<div class="w-full flex flex-col gap-3"><div class="bg-white h-64 md:h-80 flex items-center justify-center p-2 border rounded-xl shadow-sm overflow-hidden"><img id="detail-main-img" src="${imgs[0]}" class="w-full h-full object-contain rounded"></div>`;
+                if(imgs.length > 1) {
+                    imgGallery += `<div class="flex gap-2 justify-center mt-2">` + imgs.map(u => `<img src="${u}" onclick="window.changeMainImg('${u}')" class="w-16 h-16 object-cover border-2 border-transparent hover:border-blue-500 rounded cursor-pointer transition shadow-sm bg-white p-1">`).join('') + `</div>`;
+                }
+                imgGallery += `</div>`;
+            } else {
+                imgGallery = `<div class="w-full bg-white h-64 md:h-80 flex items-center justify-center p-2 border rounded-xl shadow-sm overflow-hidden"><i class="fas fa-box text-9xl text-blue-300"></i></div>`;
+            }
+
+            document.getElementById('product-details-content').innerHTML = `
+                <div class="w-full md:w-1/2">${imgGallery}</div>
+                <div class="w-full md:w-1/2 flex flex-col justify-center">
+                    <h1 class="text-2xl md:text-3xl font-bold mb-4 text-slate-800">${p.name}</h1>
+                    <div class="text-2xl text-blue-600 font-bold mb-4 bg-blue-50 inline-block p-2 rounded w-max">${p.price} ج.م</div>
+                    <p class="mb-6 leading-relaxed text-slate-600 text-sm md:text-base whitespace-pre-line">${p.desc||''}</p>
+                    <button onclick="window.openWhatsApp('أريد طلب منتج: ${p.name}')" class="bg-green-500 text-white font-bold py-4 rounded-xl text-lg shadow-md hover:bg-green-600 transition"><i class="fab fa-whatsapp"></i> اطلب عبر الواتساب</button>
+                </div>`;
             window.showPage('page-product-details');
         };
 
-        // ================= الباقات للعميل (الصفحة الرئيسية) =================
         window.getPackagePrices = (pkg) => {
             let originalPrice = 0; let counts = {};
-            if(pkg.products && pkg.products.length > 0) {
+            if(pkg.products && pkg.products.length > 0 && Array.isArray(window.siteData.products)) {
                 pkg.products.forEach(pid => {
                     let p = window.siteData.products.find(x => x.id === pid);
                     if(p) { originalPrice += (parseFloat(p.price) || 0); counts[p.name] = (counts[p.name] || 0) + 1; }
@@ -487,13 +526,14 @@
             }
             let finalPrice = originalPrice;
             if (pkg.discountAmount !== undefined) finalPrice = originalPrice - pkg.discountAmount;
-            else if (pkg.price !== undefined) finalPrice = pkg.price; // دعم للباقات القديمة
+            else if (pkg.price !== undefined) finalPrice = pkg.price;
             if(finalPrice < 0) finalPrice = 0;
             return { originalPrice, finalPrice, counts };
         };
 
         window.renderFrontendPackages = () => {
             const cont = document.getElementById('home-packages-container'); cont.innerHTML = '';
+            if(!Array.isArray(window.siteData.packages)) window.siteData.packages = [];
             let visPkgs = window.siteData.packages.filter(p => !p.isHidden);
             if(visPkgs.length === 0) { document.getElementById('packages-section').classList.add('hidden'); return; }
             document.getElementById('packages-section').classList.remove('hidden');
@@ -517,16 +557,16 @@
             });
         };
 
-        // ================= الإدارة: المنتجات =================
         window.switchAdminTab = t => { document.querySelectorAll('.admin-tab').forEach(d => d.classList.add('hidden')); document.getElementById(`admin-${t}`).classList.remove('hidden'); };
 
         window.renderAdminProducts = () => {
             const tb = document.getElementById('admin-products-table'); tb.innerHTML = '';
-            if(!window.siteData.products) return;
+            if(!Array.isArray(window.siteData.products)) return;
             window.siteData.products.forEach(p => { 
-                let img = p.imgUrl ? `<img src="${p.imgUrl}" class="w-8 h-8 object-cover rounded">` : `<i class="fas fa-box text-slate-300"></i>`;
+                let dUrl = (p.images && p.images.length > 0) ? p.images[0] : (p.imgUrl ? p.imgUrl : null);
+                let img = dUrl ? `<img src="${dUrl}" class="w-8 h-8 object-cover rounded">` : `<i class="fas fa-box text-slate-300"></i>`;
                 let eye = p.isHidden ? 'fa-eye-slash text-slate-300' : 'fa-eye text-green-500';
-                tb.innerHTML += `<tr class="border-b ${p.isHidden ? 'bg-slate-50 opacity-60' : ''}"><td class="p-2">${img}</td><td class="p-2 text-sm font-bold">${p.name}</td><td class="p-2 text-sm text-slate-500">${p.costPrice||0}</td><td class="p-2 font-bold text-blue-600 text-sm">${p.price}</td><td class="p-2 text-left whitespace-nowrap"><button onclick="window.toggleProdVis('${p.id}', ${!!p.isHidden})" class="mx-1 text-lg" title="إخفاء/إظهار"><i class="fas ${eye}"></i></button><button onclick="window.openEditProdModal('${p.id}')" class="mx-1 text-lg text-blue-600" title="تعديل"><i class="fas fa-edit"></i></button><button onclick="window.deleteProduct('${p.id}')" class="mx-1 text-lg text-red-500" title="حذف نهائي"><i class="fas fa-trash"></i></button></td></tr>`; 
+                tb.innerHTML += `<tr class="border-b ${p.isHidden ? 'bg-slate-50 opacity-60' : ''}"><td class="p-2">${img}</td><td class="p-2 text-sm font-bold truncate max-w-[150px]">${p.name}</td><td class="p-2 text-sm text-slate-500">${p.costPrice||0}</td><td class="p-2 font-bold text-blue-600 text-sm">${p.price}</td><td class="p-2 text-left whitespace-nowrap"><button onclick="window.toggleProdVis('${p.id}', ${!!p.isHidden})" class="mx-1 text-lg" title="إخفاء/إظهار"><i class="fas ${eye}"></i></button><button onclick="window.openEditProdModal('${p.id}')" class="mx-1 text-lg text-blue-600" title="تعديل"><i class="fas fa-edit"></i></button><button onclick="window.deleteProduct('${p.id}')" class="mx-1 text-lg text-red-500" title="حذف نهائي"><i class="fas fa-trash"></i></button></td></tr>`; 
             });
         };
 
@@ -535,39 +575,88 @@
 
         let currProdId = null;
         window.openEditProdModal = id => {
-            currProdId = id; document.getElementById('upload-status').innerText='';
-            if(id && window.siteData.products) {
-                let p = window.siteData.products.find(x => x.id === id);
-                document.getElementById('modal-prod-title').innerText="تعديل منتج";
-                document.getElementById('modal-prod-name').value=p.name; document.getElementById('modal-prod-cost').value=p.costPrice||0; document.getElementById('modal-prod-price').value=p.price; document.getElementById('modal-prod-desc').value=p.desc||''; document.getElementById('modal-prod-cat').value=p.category||'other'; document.getElementById('modal-prod-img-url').value=p.imgUrl||'';
-            } else {
-                document.getElementById('modal-prod-title').innerText="منتج جديد";
-                document.getElementById('modal-prod-name').value=""; document.getElementById('modal-prod-cost').value=""; document.getElementById('modal-prod-price').value=""; document.getElementById('modal-prod-desc').value=""; document.getElementById('modal-prod-img-url').value="";
-            }
-            document.getElementById('edit-prod-modal').classList.remove('hidden');
+            try {
+                currProdId = id; 
+                for(let i=0; i<3; i++) {
+                    document.getElementById(`upload-status-${i}`).classList.add('hidden');
+                    document.getElementById(`modal-prod-img-preview-${i}`).src = '';
+                    document.getElementById(`modal-prod-img-preview-${i}`).classList.add('hidden');
+                    document.getElementById(`modal-prod-img-icon-${i}`).classList.remove('hidden');
+                    document.getElementById(`modal-prod-img-url-${i}`).value = '';
+                }
+
+                if(id && window.siteData.products) {
+                    let p = window.siteData.products.find(x => x.id === id);
+                    document.getElementById('modal-prod-title').innerText="تعديل منتج";
+                    document.getElementById('modal-prod-name').value=p.name; document.getElementById('modal-prod-cost').value=p.costPrice||0; document.getElementById('modal-prod-price').value=p.price; document.getElementById('modal-prod-desc').value=p.desc||''; document.getElementById('modal-prod-cat').value=p.category||'other';
+                    
+                    let imgs = p.images && p.images.length > 0 ? p.images : (p.imgUrl ? [p.imgUrl] : []);
+                    for(let i=0; i<Math.min(3, imgs.length); i++) {
+                        if(imgs[i]) {
+                            document.getElementById(`modal-prod-img-url-${i}`).value = imgs[i];
+                            document.getElementById(`modal-prod-img-preview-${i}`).src = imgs[i];
+                            document.getElementById(`modal-prod-img-preview-${i}`).classList.remove('hidden');
+                            document.getElementById(`modal-prod-img-icon-${i}`).classList.add('hidden');
+                        }
+                    }
+                } else {
+                    document.getElementById('modal-prod-title').innerText="منتج جديد";
+                    document.getElementById('modal-prod-name').value=""; document.getElementById('modal-prod-cost').value=""; document.getElementById('modal-prod-price').value=""; document.getElementById('modal-prod-desc').value="";
+                }
+                document.getElementById('edit-prod-modal').classList.remove('hidden');
+            } catch(e) { console.error("Error opening modal", e); alert("حدث خطأ"); }
         };
 
-        window.uploadImageToImgBB = async e => {
-            let f = e.target.files[0]; if(!f) return;
-            let st = document.getElementById('upload-status'); st.innerText = "جاري رفع الصورة لـ ImgBB...";
-            let fd = new FormData(); fd.append('image', f);
+        window.uploadImageToImgBB = async (e, idx) => {
             try {
-                let r = await (await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {method:'POST',body:fd})).json();
-                if(r.success) { document.getElementById('modal-prod-img-url').value = r.data.url; st.innerText="تم رفع الصورة بنجاح وتأمينها!"; }
-                else st.innerText="فشل الرفع.";
-            } catch(ex) { st.innerText="خطأ بالإنترنت أثناء الرفع."; }
+                let f = e.target.files[0]; if(!f) return;
+                let st = document.getElementById(`upload-status-${idx}`); 
+                st.innerText = "جاري رفع الصورة..."; st.classList.remove('hidden', 'text-red-500', 'text-green-500'); st.classList.add('text-blue-600');
+                
+                let fd = new FormData(); fd.append('image', f);
+                let res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: fd });
+                if(!res.ok) throw new Error("HTTP error");
+                let r = await res.json();
+                if(r.success) { 
+                    document.getElementById(`modal-prod-img-url-${idx}`).value = r.data.url;
+                    document.getElementById(`modal-prod-img-preview-${idx}`).src = r.data.url;
+                    document.getElementById(`modal-prod-img-preview-${idx}`).classList.remove('hidden');
+                    document.getElementById(`modal-prod-img-icon-${idx}`).classList.add('hidden');
+                    st.innerText="تم رفع الصورة بنجاح!"; st.classList.replace('text-blue-600', 'text-green-500');
+                } else { st.innerText="فشل الرفع."; st.classList.replace('text-blue-600', 'text-red-500'); }
+            } catch(ex) { console.error(ex); let st = document.getElementById(`upload-status-${idx}`); st.innerText="خطأ بالإنترنت."; st.classList.replace('text-blue-600', 'text-red-500'); }
         };
 
         window.saveProdToFirestore = async () => {
-            const data = { name: document.getElementById('modal-prod-name').value, costPrice: parseFloat(document.getElementById('modal-prod-cost').value)||0, price: parseFloat(document.getElementById('modal-prod-price').value)||0, desc: document.getElementById('modal-prod-desc').value, category: document.getElementById('modal-prod-cat').value, imgUrl: document.getElementById('modal-prod-img-url').value };
-            if(currProdId) await updateDoc(doc(db, "products", currProdId), data); else await addDoc(collection(db, "products"), data);
-            document.getElementById('edit-prod-modal').classList.add('hidden'); window.fetchData();
+            try {
+                let btn = document.getElementById('btn-save-prod'); btn.innerText = "جاري الحفظ...";
+                let imgs = [];
+                for(let i=0; i<3; i++) {
+                    let u = document.getElementById(`modal-prod-img-url-${i}`).value;
+                    if(u && u.trim() !== '') imgs.push(u.trim());
+                }
+
+                const data = { 
+                    name: document.getElementById('modal-prod-name').value, 
+                    costPrice: parseFloat(document.getElementById('modal-prod-cost').value)||0, 
+                    price: parseFloat(document.getElementById('modal-prod-price').value)||0, 
+                    desc: document.getElementById('modal-prod-desc').value, 
+                    category: document.getElementById('modal-prod-cat').value, 
+                    images: imgs,
+                    imgUrl: imgs.length > 0 ? imgs[0] : "" 
+                };
+                if(currProdId) await updateDoc(doc(db, "products", currProdId), data); 
+                else await addDoc(collection(db, "products"), data);
+                
+                document.getElementById('edit-prod-modal').classList.add('hidden'); 
+                btn.innerText = "حفظ المنتج"; 
+                window.fetchData();
+            } catch(e) { console.error(e); alert("خطأ في الحفظ"); }
         };
 
-        // ================= الإدارة: الباقات الديناميكية =================
         window.renderAdminPackages = () => { 
             let c = document.getElementById('admin-packages-list'); c.innerHTML=''; 
-            if(!window.siteData.packages) return; 
+            if(!Array.isArray(window.siteData.packages)) return; 
             window.siteData.packages.forEach(p => { 
                 let pData = window.getPackagePrices(p);
                 let eye = p.isHidden ? 'fa-eye-slash text-slate-300' : 'fa-eye text-green-500';
@@ -579,36 +668,36 @@
         window.deletePackage = async (id) => { if(confirm("حذف هذه الباقة نهائياً؟")) { await deleteDoc(doc(db, "packages", id)); window.fetchData(); } };
 
         window.openEditPkgModal = id => { 
-            currPkgId = id; window.tempPkgProducts = {}; document.querySelectorAll('.pkg-target').forEach(c => c.checked = false);
-            let pList = document.getElementById('modal-pkg-products'); pList.innerHTML = '';
+            try {
+                currPkgId = id; window.tempPkgProducts = {}; document.querySelectorAll('.pkg-target').forEach(c => c.checked = false);
+                let pList = document.getElementById('modal-pkg-products'); pList.innerHTML = '';
 
-            if(id) {
-                let pkg = window.siteData.packages.find(x => x.id === id);
-                document.getElementById('modal-pkg-name').value = pkg.name; document.getElementById('modal-pkg-desc').value = pkg.desc || "";
-                
-                // حساب الكميات من مصفوفة المنتجات القديمة
-                if(pkg.products) pkg.products.forEach(pid => window.tempPkgProducts[pid] = (window.tempPkgProducts[pid] || 0) + 1);
-                if(pkg.target) pkg.target.forEach(t => { let cb = document.querySelector(`.pkg-target[value="${t}"]`); if(cb) cb.checked = true; });
-                
-                // استنتاج الخصم لو كانت باقة قديمة متسجل فيها السعر النهائي فقط
-                let discount = pkg.discountAmount;
-                if(discount === undefined && pkg.price !== undefined) {
-                    let tempOrig = 0; if(pkg.products) pkg.products.forEach(pid => { let pr = window.siteData.products.find(x=>x.id===pid); if(pr) tempOrig += pr.price; });
-                    discount = tempOrig - pkg.price; if(discount < 0) discount = 0;
+                if(id) {
+                    let pkg = window.siteData.packages.find(x => x.id === id);
+                    document.getElementById('modal-pkg-name').value = pkg.name; document.getElementById('modal-pkg-desc').value = pkg.desc || "";
+                    
+                    if(Array.isArray(pkg.products)) pkg.products.forEach(pid => window.tempPkgProducts[pid] = (window.tempPkgProducts[pid] || 0) + 1);
+                    if(Array.isArray(pkg.target)) pkg.target.forEach(t => { let cb = document.querySelector(`.pkg-target[value="${t}"]`); if(cb) cb.checked = true; });
+                    
+                    let discount = pkg.discountAmount;
+                    if(discount === undefined && pkg.price !== undefined) {
+                        let tempOrig = 0; if(Array.isArray(pkg.products)) pkg.products.forEach(pid => { let pr = window.siteData.products.find(x=>x.id===pid); if(pr) tempOrig += pr.price; });
+                        discount = tempOrig - pkg.price; if(discount < 0) discount = 0;
+                    }
+                    document.getElementById('modal-pkg-discount').value = discount || 0;
+                } else {
+                    document.getElementById('modal-pkg-name').value = ""; document.getElementById('modal-pkg-desc').value = ""; document.getElementById('modal-pkg-discount').value = 0;
                 }
-                document.getElementById('modal-pkg-discount').value = discount || 0;
-            } else {
-                document.getElementById('modal-pkg-name').value = ""; document.getElementById('modal-pkg-desc').value = ""; document.getElementById('modal-pkg-discount').value = 0;
-            }
 
-            // عرض المنتجات للتحكم بالكميات
-            window.siteData.products.forEach(p => {
-                let qty = window.tempPkgProducts[p.id] || 0;
-                pList.innerHTML += `<div class="flex justify-between items-center p-2 border-b bg-white"><div class="truncate text-xs md:text-sm font-bold" title="${p.name}">${p.name} <span class="text-blue-500">(${p.price})</span></div><div class="flex items-center gap-2"><button onclick="window.changePkgItemQty('${p.id}', -1)" class="bg-red-50 text-red-500 w-6 h-6 rounded flex items-center justify-center font-bold border border-red-100">-</button><span id="pkg-qty-${p.id}" class="font-bold w-4 text-center text-sm">${qty}</span><button onclick="window.changePkgItemQty('${p.id}', 1)" class="bg-green-50 text-green-600 w-6 h-6 rounded flex items-center justify-center font-bold border border-green-100">+</button></div></div>`;
-            });
+                let productsArr = Array.isArray(window.siteData.products) ? window.siteData.products : [];
+                productsArr.forEach(p => {
+                    let qty = window.tempPkgProducts[p.id] || 0;
+                    pList.innerHTML += `<div class="flex justify-between items-center p-2 border-b bg-white"><div class="truncate text-xs md:text-sm font-bold" title="${p.name}">${p.name} <span class="text-blue-500">(${p.price})</span></div><div class="flex items-center gap-2"><button onclick="window.changePkgItemQty('${p.id}', -1)" class="bg-red-50 text-red-500 w-6 h-6 rounded flex items-center justify-center font-bold border border-red-100">-</button><span id="pkg-qty-${p.id}" class="font-bold w-4 text-center text-sm">${qty}</span><button onclick="window.changePkgItemQty('${p.id}', 1)" class="bg-green-50 text-green-600 w-6 h-6 rounded flex items-center justify-center font-bold border border-green-100">+</button></div></div>`;
+                });
 
-            window.calcPkgPrices();
-            document.getElementById('edit-pkg-modal').classList.remove('hidden'); 
+                window.calcPkgPrices();
+                document.getElementById('edit-pkg-modal').classList.remove('hidden'); 
+            } catch (e) { console.error(e); alert("حدث خطأ أثناء فتح الباقة."); }
         };
 
         window.changePkgItemQty = (pid, change) => {
@@ -619,7 +708,7 @@
         window.calcPkgPrices = () => {
             let orig = 0;
             for (const [pid, qty] of Object.entries(window.tempPkgProducts)) {
-                if(qty > 0) { let p = window.siteData.products.find(x => x.id === pid); if(p) orig += (p.price * qty); }
+                if(qty > 0) { let p = window.siteData.products.find(x => x.id === pid); if(p) orig += (parseFloat(p.price) * qty); }
             }
             document.getElementById('modal-pkg-original-price').innerText = orig;
             let disc = parseFloat(document.getElementById('modal-pkg-discount').value) || 0;
@@ -637,7 +726,6 @@
                 discountAmount: parseFloat(document.getElementById('modal-pkg-discount').value) || 0, 
                 desc: document.getElementById('modal-pkg-desc').value, 
                 target: targets, products: prodsArray,
-                // نحتفظ بـ price لكي لا تتعطل أكواد الاستعلامات القديمة إن وجدت، ولكن الاعتماد الأساسي أصبح على الخصم
                 price: parseFloat(document.getElementById('modal-pkg-final-price').innerText) || 0
             }; 
             
@@ -645,10 +733,9 @@
             document.getElementById('edit-pkg-modal').classList.add('hidden'); window.fetchData(); 
         };
 
-        // ================= الـ POS والفواتير وإخفاء الأرباح =================
         let invRows = []; 
         window.addInvoiceItemRow = () => { 
-            if(!window.siteData.products) return; 
+            if(!Array.isArray(window.siteData.products)) return; 
             let o = window.siteData.products.filter(p=>!p.isHidden).map(p => `<option value="${p.id}" data-price="${p.price}" data-cost="${p.costPrice}">${p.name} (${p.price})</option>`).join(''); 
             let rid = 'inv_r_' + Date.now() + Math.floor(Math.random()*100);
             invRows.push(rid);
@@ -667,15 +754,14 @@
                     c += (parseFloat(sel.options[sel.selectedIndex].dataset.cost||0) * qty); 
                 } 
             }); 
-            let finalT = t - d;
-            document.getElementById('inv-total').innerText = finalT; 
+            let finalT = t - d; document.getElementById('inv-total').innerText = finalT; 
             let profit = finalT - c - e;
             let pEl = document.getElementById('inv-profit');
             pEl.dataset.realProfit = profit; pEl.innerText = window.isProfitUnlocked ? profit + " ج.م" : "**** ج.م"; 
         };
 
         window.generateInvoice = () => {
-            window.calcInvoiceTotal(); // Refresh
+            window.calcInvoiceTotal();
             document.getElementById('prev-name').innerText = document.getElementById('inv-name').value || "عميل نقدي";
             let d = new Date(); document.getElementById('prev-date').innerText = d.toLocaleDateString('ar-EG') + " " + d.toLocaleTimeString('ar-EG', {hour: '2-digit', minute:'2-digit'});
             
@@ -709,13 +795,12 @@
             if(total <= 0) { alert("الفاتورة فارغة!"); return; }
             let pEl = document.getElementById('inv-profit');
             await addDoc(collection(db,"invoices"), {
-                client: document.getElementById('inv-name').value || 'عميل نقدي', total: total, cost: 0, // Cost is deduced in real-time, saved simply here
+                client: document.getElementById('inv-name').value || 'عميل نقدي', total: total, cost: 0,
                 expenses: parseFloat(document.getElementById('inv-expenses').value)||0, profit: parseFloat(pEl.dataset.realProfit)||0, timestamp: new Date().toLocaleDateString('ar-EG')
             }); 
             alert("تم حفظ الفاتورة بالحسابات بنجاح."); document.getElementById('invoice-items').innerHTML=''; document.getElementById('inv-name').value=''; document.getElementById('inv-discount').value=0; document.getElementById('inv-expenses').value=0; invRows=[]; window.calcInvoiceTotal(); window.fetchData(); 
         };
 
-        // ================= الإدارة: الحسابات والحماية =================
         window.isProfitUnlocked = false;
         window.unlockProfit = (id) => {
             if(window.isProfitUnlocked) {
@@ -740,19 +825,17 @@
             let ec = document.getElementById('acc-cost'); ec.dataset.realVal = tc + te; ec.innerText = window.isProfitUnlocked ? (tc+te) : "****";
             let ep = document.getElementById('acc-profit'); ep.dataset.realProfit = (ts-tc-te); ep.innerText = window.isProfitUnlocked ? (ts-tc-te) + " ج.م" : "****";
             let tb = document.getElementById('accounting-table'); tb.innerHTML=''; 
-            if(!window.siteData.invoices) return; 
+            if(!Array.isArray(window.siteData.invoices)) return; 
             window.siteData.invoices.forEach(i => {
                 let pStr = window.isProfitUnlocked ? (i.profit || (i.total-i.expenses)) : "****";
                 tb.innerHTML += `<tr class="border-b"><td class="p-3 text-sm">${i.client}<br><span class="text-xs text-slate-400">${i.timestamp}</span></td><td class="p-3 font-bold">${i.total}</td><td class="p-3 text-green-600 font-bold blurred-text" data-real-profit="${i.profit || (i.total-i.expenses)}">${pStr}</td><td class="p-3"><button onclick="window.deleteInvoice('${i.id}')" class="text-red-500 hover:bg-red-50 p-2 rounded"><i class="fas fa-trash"></i></button></td></tr>`;
             }); 
         };
 
-        // ================= الإعدادات =================
         window.saveSettingsFirestore = async () => {
             try { await setDoc(doc(db, "settings", "general"), { whatsappNumber: document.getElementById('setting-phone').value, freeInstall: document.getElementById('setting-free-install').checked, installFee: parseFloat(document.getElementById('setting-install-fee').value) || 0 }); alert("تم حفظ الإعدادات!"); window.fetchData(); } catch(e) { console.error(e); }
         };
 
-        // ================= الاستبيان =================
         const quizQ = [
             { id: "q1", text: "1. إيه أكتر حاجة بتدور عليها لبيتك؟", opts: [{l: "الراحة والرفاهية", v: "راحة"}, {l: "الأمان والمراقبة", v: "أمان"}, {l: "توفير الكهرباء", v: "توفير"}, {l: "نظام متكامل", v: "متكامل"}] },
             { id: "q2", text: "2. الميزانية المبدئية اللي حابب تستثمرها؟", opts: [{l: "اقتصادية", v: "اقتصادية"}, {l: "متوسطة", v: "متوسطة"}, {l: "مفتوحة (VIP)", v: "مفتوحة"}] },
@@ -768,8 +851,8 @@
         
         window.submitQuiz=()=>{
             let bestPkg = null;
-            if(window.siteData.packages && window.siteData.packages.length > 0) {
-                bestPkg = window.siteData.packages.find(p => !p.isHidden && p.target && p.target.includes(userAns.q1) && p.target.includes(userAns.q2));
+            if(Array.isArray(window.siteData.packages) && window.siteData.packages.length > 0) {
+                bestPkg = window.siteData.packages.find(p => !p.isHidden && Array.isArray(p.target) && p.target.includes(userAns.q1) && p.target.includes(userAns.q2));
                 if(!bestPkg) bestPkg = window.siteData.packages.find(p => !p.isHidden) || window.siteData.packages[0];
             }
             document.getElementById('quiz-container').classList.add('hidden'); document.getElementById('quiz-result').classList.remove('hidden');
