@@ -94,8 +94,7 @@
             <section id="packages-section" class="py-16 bg-white border-t hidden">
                 <div class="container mx-auto px-4">
                     <h2 class="text-3xl font-bold text-slate-800 mb-10 text-center">عروض الباقات المتكاملة</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="home-packages-container">
-                        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="home-packages-container"></div>
                 </div>
             </section>
 
@@ -117,7 +116,7 @@
 
         <div id="page-product-details" class="hidden page-section py-16 bg-white min-h-screen">
              <div class="container mx-auto px-4">
-                <button onclick="window.showPage('page-home')" class="mb-6 text-blue-600 font-semibold flex items-center gap-2"><i class="fas fa-arrow-right"></i> العودة للمنتجات</button>
+                <button onclick="window.showPage('page-home'); setTimeout(()=> document.getElementById('products-section').scrollIntoView(), 100);" class="mb-6 text-blue-600 font-semibold flex items-center gap-2"><i class="fas fa-arrow-right"></i> العودة للمنتجات</button>
                 <div class="flex flex-col md:flex-row gap-8" id="product-details-content"></div>
              </div>
         </div>
@@ -263,13 +262,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                             <div class="bg-white p-4 shadow-sm rounded-xl border-l-4 border-blue-500">إجمالي المبيعات<br><b class="text-2xl" id="acc-sales">0</b></div>
                             <div class="bg-white p-4 shadow-sm rounded-xl border-l-4 border-slate-500">
-                                تكلفة ومصاريف 
-                                <i class="fas fa-lock cursor-pointer float-left text-slate-400 mt-1 p-1" onclick="window.unlockProfit('acc-cost')"></i>
+                                تكلفة ومصاريف <i class="fas fa-lock cursor-pointer float-left text-slate-400 mt-1 p-1" onclick="window.unlockProfit('acc-cost')"></i>
                                 <br><b class="text-2xl blurred-text" id="acc-cost">****</b>
                             </div>
                             <div class="bg-green-50 p-4 shadow-sm rounded-xl border-l-4 border-green-500">
-                                صافي الربح 
-                                <i class="fas fa-lock cursor-pointer float-left text-green-400 mt-1 p-1" onclick="window.unlockProfit('acc-profit')"></i>
+                                صافي الربح <i class="fas fa-lock cursor-pointer float-left text-green-400 mt-1 p-1" onclick="window.unlockProfit('acc-profit')"></i>
                                 <br><b class="text-2xl text-green-700 blurred-text" id="acc-profit">****</b>
                             </div>
                         </div>
@@ -471,9 +468,9 @@
             } catch(e) { console.log("Error Fetching Data:", e); }
         };
 
+        // ================= المنتجات للعميل =================
         window.renderFrontendProducts = () => {
             const cont = document.getElementById('products-container'); cont.innerHTML = '';
-            if(!Array.isArray(window.siteData.products)) window.siteData.products = [];
             let visProds = window.siteData.products.filter(p => !p.isHidden);
             if(visProds.length === 0) { cont.innerHTML = '<p class="col-span-full text-center">لا توجد منتجات حالياً.</p>'; return; }
             visProds.forEach(p => {
@@ -516,9 +513,10 @@
             window.showPage('page-product-details');
         };
 
+        // ================= الباقات للعميل =================
         window.getPackagePrices = (pkg) => {
             let originalPrice = 0; let counts = {};
-            if(pkg.products && pkg.products.length > 0 && Array.isArray(window.siteData.products)) {
+            if(pkg.products && Array.isArray(pkg.products)) {
                 pkg.products.forEach(pid => {
                     let p = window.siteData.products.find(x => x.id === pid);
                     if(p) { originalPrice += (parseFloat(p.price) || 0); counts[p.name] = (counts[p.name] || 0) + 1; }
@@ -533,7 +531,6 @@
 
         window.renderFrontendPackages = () => {
             const cont = document.getElementById('home-packages-container'); cont.innerHTML = '';
-            if(!Array.isArray(window.siteData.packages)) window.siteData.packages = [];
             let visPkgs = window.siteData.packages.filter(p => !p.isHidden);
             if(visPkgs.length === 0) { document.getElementById('packages-section').classList.add('hidden'); return; }
             document.getElementById('packages-section').classList.remove('hidden');
@@ -557,11 +554,12 @@
             });
         };
 
+        // ================= الإدارة: المنتجات =================
         window.switchAdminTab = t => { document.querySelectorAll('.admin-tab').forEach(d => d.classList.add('hidden')); document.getElementById(`admin-${t}`).classList.remove('hidden'); };
 
         window.renderAdminProducts = () => {
             const tb = document.getElementById('admin-products-table'); tb.innerHTML = '';
-            if(!Array.isArray(window.siteData.products)) return;
+            if(!window.siteData.products) return;
             window.siteData.products.forEach(p => { 
                 let dUrl = (p.images && p.images.length > 0) ? p.images[0] : (p.imgUrl ? p.imgUrl : null);
                 let img = dUrl ? `<img src="${dUrl}" class="w-8 h-8 object-cover rounded">` : `<i class="fas fa-box text-slate-300"></i>`;
@@ -570,23 +568,23 @@
             });
         };
 
-        window.toggleProdVis = async (id, isHidden) => { await updateDoc(doc(db, "products", id), { isHidden: !isHidden }); window.fetchData(); };
-        window.deleteProduct = async (id) => { if(confirm("حذف هذا المنتج نهائياً من قاعدة البيانات؟")) { await deleteDoc(doc(db, "products", id)); window.fetchData(); } };
+        window.toggleProdVis = async (id, isHidden) => { try { await updateDoc(doc(db, "products", id), { isHidden: !isHidden }); window.fetchData(); } catch(e) { console.error(e); } };
+        window.deleteProduct = async (id) => { if(confirm("حذف هذا المنتج نهائياً من قاعدة البيانات؟")) { try { await deleteDoc(doc(db, "products", id)); window.fetchData(); } catch(e) { console.error(e); } } };
 
         let currProdId = null;
         window.openEditProdModal = id => {
-            try {
-                currProdId = id; 
-                for(let i=0; i<3; i++) {
-                    document.getElementById(`upload-status-${i}`).classList.add('hidden');
-                    document.getElementById(`modal-prod-img-preview-${i}`).src = '';
-                    document.getElementById(`modal-prod-img-preview-${i}`).classList.add('hidden');
-                    document.getElementById(`modal-prod-img-icon-${i}`).classList.remove('hidden');
-                    document.getElementById(`modal-prod-img-url-${i}`).value = '';
-                }
+            currProdId = id; 
+            for(let i=0; i<3; i++) {
+                document.getElementById(`upload-status-${i}`).classList.add('hidden');
+                document.getElementById(`modal-prod-img-preview-${i}`).src = '';
+                document.getElementById(`modal-prod-img-preview-${i}`).classList.add('hidden');
+                document.getElementById(`modal-prod-img-icon-${i}`).classList.remove('hidden');
+                document.getElementById(`modal-prod-img-url-${i}`).value = '';
+            }
 
-                if(id && window.siteData.products) {
-                    let p = window.siteData.products.find(x => x.id === id);
+            if(id) {
+                let p = window.siteData.products.find(x => x.id === id);
+                if(p) {
                     document.getElementById('modal-prod-title').innerText="تعديل منتج";
                     document.getElementById('modal-prod-name').value=p.name; document.getElementById('modal-prod-cost').value=p.costPrice||0; document.getElementById('modal-prod-price').value=p.price; document.getElementById('modal-prod-desc').value=p.desc||''; document.getElementById('modal-prod-cat').value=p.category||'other';
                     
@@ -599,12 +597,12 @@
                             document.getElementById(`modal-prod-img-icon-${i}`).classList.add('hidden');
                         }
                     }
-                } else {
-                    document.getElementById('modal-prod-title').innerText="منتج جديد";
-                    document.getElementById('modal-prod-name').value=""; document.getElementById('modal-prod-cost').value=""; document.getElementById('modal-prod-price').value=""; document.getElementById('modal-prod-desc').value="";
                 }
-                document.getElementById('edit-prod-modal').classList.remove('hidden');
-            } catch(e) { console.error("Error opening modal", e); alert("حدث خطأ"); }
+            } else {
+                document.getElementById('modal-prod-title').innerText="منتج جديد";
+                document.getElementById('modal-prod-name').value=""; document.getElementById('modal-prod-cost').value=""; document.getElementById('modal-prod-price').value=""; document.getElementById('modal-prod-desc').value="";
+            }
+            document.getElementById('edit-prod-modal').classList.remove('hidden');
         };
 
         window.uploadImageToImgBB = async (e, idx) => {
@@ -622,7 +620,7 @@
                     document.getElementById(`modal-prod-img-preview-${idx}`).src = r.data.url;
                     document.getElementById(`modal-prod-img-preview-${idx}`).classList.remove('hidden');
                     document.getElementById(`modal-prod-img-icon-${idx}`).classList.add('hidden');
-                    st.innerText="تم رفع الصورة بنجاح!"; st.classList.replace('text-blue-600', 'text-green-500');
+                    st.innerText="تم الرفع بنجاح!"; st.classList.replace('text-blue-600', 'text-green-500');
                 } else { st.innerText="فشل الرفع."; st.classList.replace('text-blue-600', 'text-red-500'); }
             } catch(ex) { console.error(ex); let st = document.getElementById(`upload-status-${idx}`); st.innerText="خطأ بالإنترنت."; st.classList.replace('text-blue-600', 'text-red-500'); }
         };
@@ -651,21 +649,22 @@
                 document.getElementById('edit-prod-modal').classList.add('hidden'); 
                 btn.innerText = "حفظ المنتج"; 
                 window.fetchData();
-            } catch(e) { console.error(e); alert("خطأ في الحفظ"); }
+            } catch(e) { console.error(e); alert("حدث خطأ أثناء الحفظ. تأكد من اتصالك بالإنترنت."); }
         };
 
+        // ================= الإدارة: الباقات =================
         window.renderAdminPackages = () => { 
             let c = document.getElementById('admin-packages-list'); c.innerHTML=''; 
-            if(!Array.isArray(window.siteData.packages)) return; 
+            if(!window.siteData.packages) return; 
             window.siteData.packages.forEach(p => { 
                 let pData = window.getPackagePrices(p);
                 let eye = p.isHidden ? 'fa-eye-slash text-slate-300' : 'fa-eye text-green-500';
-                c.innerHTML += `<div class="border p-4 bg-white rounded-xl shadow-sm flex flex-col ${p.isHidden ? 'opacity-60 bg-slate-50':''}"><div class="flex justify-between items-start mb-2"><b class="text-lg text-blue-800">${p.name}</b><div class="text-lg whitespace-nowrap"><button onclick="window.togglePkgVis('${p.id}', ${!!p.isHidden})" class="mx-2"><i class="fas ${eye}"></i></button><button onclick="window.deletePackage('${p.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div></div><div class="text-slate-500 text-sm mb-2">إجمالي المنتجات: ${p.products ? p.products.length : 0} قطعة</div><div class="flex justify-between items-end mt-auto pt-2 border-t"><span class="text-green-600 font-bold text-xl">${pData.finalPrice} ج.م</span><button onclick="window.openEditPkgModal('${p.id}')" class="text-sm bg-blue-50 text-blue-600 font-bold px-3 py-1 rounded border border-blue-100 shadow-sm"><i class="fas fa-edit"></i> تعديل السعر/المحتوى</button></div></div>`; 
+                c.innerHTML += `<div class="border p-4 bg-white rounded-xl shadow-sm flex flex-col ${p.isHidden ? 'opacity-60 bg-slate-50':''}"><div class="flex justify-between items-start mb-2"><b class="text-lg text-blue-800">${p.name}</b><div class="text-lg whitespace-nowrap"><button onclick="window.togglePkgVis('${p.id}', ${!!p.isHidden})" class="mx-2"><i class="fas ${eye}"></i></button><button onclick="window.deletePackage('${p.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div></div><div class="text-slate-500 text-sm mb-2">إجمالي المنتجات: ${p.products ? p.products.length : 0} قطعة</div><div class="flex justify-between items-end mt-auto pt-2 border-t"><span class="text-green-600 font-bold text-xl">${pData.finalPrice} ج.م</span><button onclick="window.openEditPkgModal('${p.id}')" class="text-sm bg-blue-50 text-blue-600 font-bold px-3 py-1 rounded border border-blue-100 shadow-sm"><i class="fas fa-edit"></i> تعديل</button></div></div>`; 
             }); 
         };
 
-        window.togglePkgVis = async (id, isHidden) => { await updateDoc(doc(db, "packages", id), { isHidden: !isHidden }); window.fetchData(); };
-        window.deletePackage = async (id) => { if(confirm("حذف هذه الباقة نهائياً؟")) { await deleteDoc(doc(db, "packages", id)); window.fetchData(); } };
+        window.togglePkgVis = async (id, isHidden) => { try { await updateDoc(doc(db, "packages", id), { isHidden: !isHidden }); window.fetchData(); } catch(e) { console.error(e); } };
+        window.deletePackage = async (id) => { if(confirm("حذف هذه الباقة نهائياً؟")) { try { await deleteDoc(doc(db, "packages", id)); window.fetchData(); } catch(e) { console.error(e); } } };
 
         window.openEditPkgModal = id => { 
             try {
@@ -674,23 +673,24 @@
 
                 if(id) {
                     let pkg = window.siteData.packages.find(x => x.id === id);
-                    document.getElementById('modal-pkg-name').value = pkg.name; document.getElementById('modal-pkg-desc').value = pkg.desc || "";
-                    
-                    if(Array.isArray(pkg.products)) pkg.products.forEach(pid => window.tempPkgProducts[pid] = (window.tempPkgProducts[pid] || 0) + 1);
-                    if(Array.isArray(pkg.target)) pkg.target.forEach(t => { let cb = document.querySelector(`.pkg-target[value="${t}"]`); if(cb) cb.checked = true; });
-                    
-                    let discount = pkg.discountAmount;
-                    if(discount === undefined && pkg.price !== undefined) {
-                        let tempOrig = 0; if(Array.isArray(pkg.products)) pkg.products.forEach(pid => { let pr = window.siteData.products.find(x=>x.id===pid); if(pr) tempOrig += pr.price; });
-                        discount = tempOrig - pkg.price; if(discount < 0) discount = 0;
+                    if(pkg) {
+                        document.getElementById('modal-pkg-name').value = pkg.name; document.getElementById('modal-pkg-desc').value = pkg.desc || "";
+                        
+                        if(Array.isArray(pkg.products)) pkg.products.forEach(pid => window.tempPkgProducts[pid] = (window.tempPkgProducts[pid] || 0) + 1);
+                        if(Array.isArray(pkg.target)) pkg.target.forEach(t => { let cb = document.querySelector(`.pkg-target[value="${t}"]`); if(cb) cb.checked = true; });
+                        
+                        let discount = pkg.discountAmount;
+                        if(discount === undefined && pkg.price !== undefined) {
+                            let tempOrig = 0; if(Array.isArray(pkg.products)) pkg.products.forEach(pid => { let pr = window.siteData.products.find(x=>x.id===pid); if(pr) tempOrig += pr.price; });
+                            discount = tempOrig - pkg.price; if(discount < 0) discount = 0;
+                        }
+                        document.getElementById('modal-pkg-discount').value = discount || 0;
                     }
-                    document.getElementById('modal-pkg-discount').value = discount || 0;
                 } else {
                     document.getElementById('modal-pkg-name').value = ""; document.getElementById('modal-pkg-desc').value = ""; document.getElementById('modal-pkg-discount').value = 0;
                 }
 
-                let productsArr = Array.isArray(window.siteData.products) ? window.siteData.products : [];
-                productsArr.forEach(p => {
+                window.siteData.products.forEach(p => {
                     let qty = window.tempPkgProducts[p.id] || 0;
                     pList.innerHTML += `<div class="flex justify-between items-center p-2 border-b bg-white"><div class="truncate text-xs md:text-sm font-bold" title="${p.name}">${p.name} <span class="text-blue-500">(${p.price})</span></div><div class="flex items-center gap-2"><button onclick="window.changePkgItemQty('${p.id}', -1)" class="bg-red-50 text-red-500 w-6 h-6 rounded flex items-center justify-center font-bold border border-red-100">-</button><span id="pkg-qty-${p.id}" class="font-bold w-4 text-center text-sm">${qty}</span><button onclick="window.changePkgItemQty('${p.id}', 1)" class="bg-green-50 text-green-600 w-6 h-6 rounded flex items-center justify-center font-bold border border-green-100">+</button></div></div>`;
                 });
@@ -717,25 +717,28 @@
         };
         
         window.savePkgToFirestore = async () => { 
-            const targets = Array.from(document.querySelectorAll('.pkg-target:checked')).map(c => c.value);
-            let prodsArray = [];
-            for (const [pid, qty] of Object.entries(window.tempPkgProducts)) { for(let i=0; i<qty; i++) prodsArray.push(pid); }
-            
-            let d = {
-                name: document.getElementById('modal-pkg-name').value || "باقة بدون اسم", 
-                discountAmount: parseFloat(document.getElementById('modal-pkg-discount').value) || 0, 
-                desc: document.getElementById('modal-pkg-desc').value, 
-                target: targets, products: prodsArray,
-                price: parseFloat(document.getElementById('modal-pkg-final-price').innerText) || 0
-            }; 
-            
-            if(currPkgId) await updateDoc(doc(db,"packages",currPkgId),d); else await addDoc(collection(db,"packages"),d); 
-            document.getElementById('edit-pkg-modal').classList.add('hidden'); window.fetchData(); 
+            try {
+                const targets = Array.from(document.querySelectorAll('.pkg-target:checked')).map(c => c.value);
+                let prodsArray = [];
+                for (const [pid, qty] of Object.entries(window.tempPkgProducts)) { for(let i=0; i<qty; i++) prodsArray.push(pid); }
+                
+                let d = {
+                    name: document.getElementById('modal-pkg-name').value || "باقة بدون اسم", 
+                    discountAmount: parseFloat(document.getElementById('modal-pkg-discount').value) || 0, 
+                    desc: document.getElementById('modal-pkg-desc').value, 
+                    target: targets, products: prodsArray,
+                    price: parseFloat(document.getElementById('modal-pkg-final-price').innerText) || 0
+                }; 
+                
+                if(currPkgId) await updateDoc(doc(db,"packages",currPkgId),d); else await addDoc(collection(db,"packages"),d); 
+                document.getElementById('edit-pkg-modal').classList.add('hidden'); window.fetchData(); 
+            } catch(e) { console.error(e); alert("حدث خطأ أثناء الحفظ."); }
         };
 
+        // ================= الـ POS والفواتير =================
         let invRows = []; 
         window.addInvoiceItemRow = () => { 
-            if(!Array.isArray(window.siteData.products)) return; 
+            if(!window.siteData.products) return; 
             let o = window.siteData.products.filter(p=>!p.isHidden).map(p => `<option value="${p.id}" data-price="${p.price}" data-cost="${p.costPrice}">${p.name} (${p.price})</option>`).join(''); 
             let rid = 'inv_r_' + Date.now() + Math.floor(Math.random()*100);
             invRows.push(rid);
@@ -763,7 +766,7 @@
         window.generateInvoice = () => {
             window.calcInvoiceTotal();
             document.getElementById('prev-name').innerText = document.getElementById('inv-name').value || "عميل نقدي";
-            let d = new Date(); document.getElementById('prev-date').innerText = d.toLocaleDateString('ar-EG') + " " + d.toLocaleTimeString('ar-EG', {hour: '2-digit', minute:'2-digit'});
+            let d = new Date(); document.getElementById('prev-date').innerText = d.toLocaleDateString('ar-EG');
             
             const tbody = document.getElementById('prev-items'); tbody.innerHTML = '';
             let subtotal = 0;
@@ -791,14 +794,16 @@
         };
 
         window.saveInvoiceToFirestore = async () => { 
-            let total = parseFloat(document.getElementById('inv-total').innerText);
-            if(total <= 0) { alert("الفاتورة فارغة!"); return; }
-            let pEl = document.getElementById('inv-profit');
-            await addDoc(collection(db,"invoices"), {
-                client: document.getElementById('inv-name').value || 'عميل نقدي', total: total, cost: 0,
-                expenses: parseFloat(document.getElementById('inv-expenses').value)||0, profit: parseFloat(pEl.dataset.realProfit)||0, timestamp: new Date().toLocaleDateString('ar-EG')
-            }); 
-            alert("تم حفظ الفاتورة بالحسابات بنجاح."); document.getElementById('invoice-items').innerHTML=''; document.getElementById('inv-name').value=''; document.getElementById('inv-discount').value=0; document.getElementById('inv-expenses').value=0; invRows=[]; window.calcInvoiceTotal(); window.fetchData(); 
+            try {
+                let total = parseFloat(document.getElementById('inv-total').innerText);
+                if(total <= 0) { alert("الفاتورة فارغة!"); return; }
+                let pEl = document.getElementById('inv-profit');
+                await addDoc(collection(db,"invoices"), {
+                    client: document.getElementById('inv-name').value || 'عميل نقدي', total: total, cost: 0,
+                    expenses: parseFloat(document.getElementById('inv-expenses').value)||0, profit: parseFloat(pEl.dataset.realProfit)||0, timestamp: new Date().toLocaleDateString('ar-EG')
+                }); 
+                alert("تم حفظ الفاتورة بالحسابات بنجاح."); document.getElementById('invoice-items').innerHTML=''; document.getElementById('inv-name').value=''; document.getElementById('inv-discount').value=0; document.getElementById('inv-expenses').value=0; invRows=[]; window.calcInvoiceTotal(); window.fetchData(); 
+            } catch(e) { console.error(e); }
         };
 
         window.isProfitUnlocked = false;
@@ -807,7 +812,7 @@
                 window.isProfitUnlocked = false;
                 document.querySelectorAll('.blurred-text').forEach(el => { el.classList.add('blurred-text'); el.innerText = "****"; });
             } else {
-                let p = prompt("أدخل كلمة السر لعرض الأرباح (وإتاحة حذف الفواتير):");
+                let p = prompt("أدخل كلمة السر لعرض الأرباح:");
                 if(p === "124578") {
                     window.isProfitUnlocked = true;
                     document.querySelectorAll('.blurred-text').forEach(el => { el.classList.remove('blurred-text'); let val = el.dataset.realProfit || el.dataset.realVal || "0"; if(el.id && el.id.includes('profit')) val += " ج.م"; el.innerText = val; });
@@ -816,8 +821,8 @@
         };
 
         window.deleteInvoice = async (id) => {
-            if(!window.isProfitUnlocked) { alert("يجب فك قفل الأرباح أولاً بكلمة السر لتتمكن من حذف الفواتير!"); return; }
-            if(confirm("هل أنت متأكد من مسح هذه الفاتورة نهائياً من الحسابات؟")) { await deleteDoc(doc(db, "invoices", id)); window.fetchData(); }
+            if(!window.isProfitUnlocked) { alert("يجب فك قفل الأرباح أولاً!"); return; }
+            if(confirm("مسح الفاتورة نهائياً؟")) { try { await deleteDoc(doc(db, "invoices", id)); window.fetchData(); } catch(e) { console.error(e); } }
         };
 
         window.renderAccounting = (ts,tc,te) => { 
@@ -825,7 +830,7 @@
             let ec = document.getElementById('acc-cost'); ec.dataset.realVal = tc + te; ec.innerText = window.isProfitUnlocked ? (tc+te) : "****";
             let ep = document.getElementById('acc-profit'); ep.dataset.realProfit = (ts-tc-te); ep.innerText = window.isProfitUnlocked ? (ts-tc-te) + " ج.م" : "****";
             let tb = document.getElementById('accounting-table'); tb.innerHTML=''; 
-            if(!Array.isArray(window.siteData.invoices)) return; 
+            if(!window.siteData.invoices) return; 
             window.siteData.invoices.forEach(i => {
                 let pStr = window.isProfitUnlocked ? (i.profit || (i.total-i.expenses)) : "****";
                 tb.innerHTML += `<tr class="border-b"><td class="p-3 text-sm">${i.client}<br><span class="text-xs text-slate-400">${i.timestamp}</span></td><td class="p-3 font-bold">${i.total}</td><td class="p-3 text-green-600 font-bold blurred-text" data-real-profit="${i.profit || (i.total-i.expenses)}">${pStr}</td><td class="p-3"><button onclick="window.deleteInvoice('${i.id}')" class="text-red-500 hover:bg-red-50 p-2 rounded"><i class="fas fa-trash"></i></button></td></tr>`;
@@ -836,6 +841,7 @@
             try { await setDoc(doc(db, "settings", "general"), { whatsappNumber: document.getElementById('setting-phone').value, freeInstall: document.getElementById('setting-free-install').checked, installFee: parseFloat(document.getElementById('setting-install-fee').value) || 0 }); alert("تم حفظ الإعدادات!"); window.fetchData(); } catch(e) { console.error(e); }
         };
 
+        // ================= الاستبيان =================
         const quizQ = [
             { id: "q1", text: "1. إيه أكتر حاجة بتدور عليها لبيتك؟", opts: [{l: "الراحة والرفاهية", v: "راحة"}, {l: "الأمان والمراقبة", v: "أمان"}, {l: "توفير الكهرباء", v: "توفير"}, {l: "نظام متكامل", v: "متكامل"}] },
             { id: "q2", text: "2. الميزانية المبدئية اللي حابب تستثمرها؟", opts: [{l: "اقتصادية", v: "اقتصادية"}, {l: "متوسطة", v: "متوسطة"}, {l: "مفتوحة (VIP)", v: "مفتوحة"}] },
@@ -851,9 +857,9 @@
         
         window.submitQuiz=()=>{
             let bestPkg = null;
-            if(Array.isArray(window.siteData.packages) && window.siteData.packages.length > 0) {
-                bestPkg = window.siteData.packages.find(p => !p.isHidden && Array.isArray(p.target) && p.target.includes(userAns.q1) && p.target.includes(userAns.q2));
-                if(!bestPkg) bestPkg = window.siteData.packages.find(p => !p.isHidden) || window.siteData.packages[0];
+            if(window.siteData.packages && window.siteData.packages.length > 0) {
+                bestPkg = window.siteData.packages.find(p => !p.isHidden && p.target && p.target.includes(userAns.q1) && p.target.includes(userAns.q2));
+                if(!bestPkg) bestPkg = window.siteData.packages.find(p => !p.isHidden);
             }
             document.getElementById('quiz-container').classList.add('hidden'); document.getElementById('quiz-result').classList.remove('hidden');
             if(bestPkg) {
