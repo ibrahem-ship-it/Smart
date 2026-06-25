@@ -425,7 +425,6 @@
             appId: "1:648921056832:web:53b6a14f5bcbe087dc41a5"
         });
         const auth = getAuth(app); const db = getFirestore(app);
-        const IMGBB_KEY = "cdbaea2ebcfed2927fc092e0df791986";
 
         window.siteData = { products: [], packages: [], invoices: [], settings: { whatsappNumber: "201000000000", freeInstall: true, installFee: 500 } };
         window.tempPkgProducts = {}; 
@@ -630,8 +629,8 @@
                         let base64data = reader.result.split(',')[1];
                         let fd = new FormData(); fd.append('image', base64data);
                         st.innerText = "جاري الرفع لـ ImgBB...";
-                        
-                        let res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: fd });
+                        // Replace with your actual ImgBB API Key below
+                        let res = await fetch(`https://api.imgbb.com/1/upload?key=cdbaea2ebcfed2927fc092e0df791986`, { method: 'POST', body: fd });
                         if(!res.ok) throw new Error("HTTP error");
                         let r = await res.json();
                         if(r.success) { 
@@ -774,7 +773,6 @@
             } catch(e) { console.error(e); alert("حدث خطأ أثناء الحفظ."); }
         };
 
-        // الـ POS
         let invRows = []; 
         window.addInvoiceItemRow = () => { 
             let prods = Array.isArray(window.siteData.products) ? window.siteData.products : [];
